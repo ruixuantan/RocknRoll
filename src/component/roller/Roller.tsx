@@ -50,28 +50,28 @@ const Roller: React.FC = () => {
                     </tr>
                     <tr>
                         <td>1</td>
-                        <td>{results[0] != undefined ? results[0].die : null}</td>
-                        <td>{results[0] != undefined ? results[0].result : null}</td>
+                        <td>{results[0] !== undefined ? results[0].die : null}</td>
+                        <td>{results[0] !== undefined ? results[0].result : null}</td>
                     </tr>
                     <tr>
                         <td>2</td>
-                        <td>{results[1] != undefined ? results[1].die : null}</td>
-                        <td>{results[1] != undefined ? results[1].result : null}</td>
+                        <td>{results[1] !== undefined ? results[1].die : null}</td>
+                        <td>{results[1] !== undefined ? results[1].result : null}</td>
                     </tr>
                     <tr>
                         <td>3</td>
-                        <td>{results[2] != undefined ? results[2].die : null}</td>
-                        <td>{results[2] != undefined ? results[2].result : null}</td>
+                        <td>{results[2] !== undefined ? results[2].die : null}</td>
+                        <td>{results[2] !== undefined ? results[2].result : null}</td>
                     </tr>
                     <tr>
                         <td>4</td>
-                        <td>{results[3] != undefined ? results[3].die : null}</td>
-                        <td>{results[3] != undefined ? results[3].result : null}</td>
+                        <td>{results[3] !== undefined ? results[3].die : null}</td>
+                        <td>{results[3] !== undefined ? results[3].result : null}</td>
                     </tr>
                     <tr>
                         <td>5</td>
-                        <td>{results[4] != undefined ? results[4].die : null}</td>
-                        <td>{results[4] != undefined ? results[4].result : null}</td>
+                        <td>{results[4] !== undefined ? results[4].die : null}</td>
+                        <td>{results[4] !== undefined ? results[4].result : null}</td>
                     </tr>
                 </table>
             </div>
