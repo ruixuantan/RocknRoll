@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { IRoller } from "./models/IRoller";
+import { IRoller } from "../.././models/IRoller";
 
 const roll = (side: number): number => {
     return Math.floor(Math.random() * side) + 1;
