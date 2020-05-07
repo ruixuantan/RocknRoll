@@ -1,7 +1,10 @@
 {
-  "homepage": "http://ruixuantan.github.io/RnR",
   "name": "rocknroll",
   "version": "0.1.0",
+  "engines": {
+    "node": "12.16.3",
+    "npm": "6.14.4"
+  },
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
