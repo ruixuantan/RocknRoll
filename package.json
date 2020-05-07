@@ -1,5 +1,5 @@
 {
-  "homepage": "https://warm-depths-57747.herokuapp.com",
+  "homepage": "https://ruixuantan.github.io/rocknroll",
   "name": "rocknroll",
   "version": "0.1.0",
   "engines": {
@@ -42,5 +42,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^2.2.0"
   }
 }
