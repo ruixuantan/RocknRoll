@@ -35,6 +35,9 @@ const Roller: React.FC = () => {
             <button onClick = {() => updateResult("d10", roll(10))}>
                 Roll d10
             </button>
+            <button onClick = {() => updateResult("d12", roll(12))}>
+                Roll d12
+            </button>
             <button onClick = {() => updateResult("d20", roll(20))}>
                 Roll d20
             </button>
