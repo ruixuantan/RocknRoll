@@ -1,18 +1,34 @@
 import React, { useState } from "react";
-import { IRoller } from "../.././models/IRoller";
+import { RollRow } from "../.././models/RollRow";
 import { Button, Container, Divider, Header, Table } from 'semantic-ui-react';
 
 const roll = (side: number): number => {
     return Math.floor(Math.random() * side) + 1;
 }
 
+interface IDieCell {
+    rollRow: RollRow
+}
+
+const DieCell: React.FC<IDieCell> = ({rollRow}) => {
+    return <Table.Cell>{rollRow !== undefined ? rollRow.die : null}</Table.Cell>;
+}
+
+interface IResultCell {
+    rollRow: RollRow
+}
+
+const ResultCell: React.FC<IResultCell> = ({rollRow}) => {
+    return <Table.Cell>{rollRow !== undefined ? rollRow.result : null}</Table.Cell>;
+}
+
 const Roller: React.FC = () => {
-    const [results, setResult] = useState<Array<IRoller>>([]);
+    const [results, setResult] = useState<Array<RollRow>>([]);
 
     //some sort of a queue
     const updateResult = (die: string, roll: number): void => {
         setResult(prev => {
-            const toAdd: IRoller = { "die": die, "result": roll };
+            const toAdd: RollRow = { "die": die, "result": roll };
             if (prev.length >= 5) {
                 prev.shift();
             }
@@ -64,28 +80,28 @@ const Roller: React.FC = () => {
                     <Table.Body>
                         <Table.Row>
                             <Table.Cell>1</Table.Cell>
-                            <Table.Cell>{results[0] !== undefined ? results[0].die : null}</Table.Cell>
-                            <Table.Cell>{results[0] !== undefined ? results[0].result : null}</Table.Cell>
+                            <DieCell rollRow={results[0]}/>
+                            <ResultCell rollRow={results[0]}/>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>2</Table.Cell>
-                            <Table.Cell>{results[1] !== undefined ? results[1].die : null}</Table.Cell>
-                            <Table.Cell>{results[1] !== undefined ? results[1].result : null}</Table.Cell>
+                            <DieCell rollRow={results[1]}/>
+                            <ResultCell rollRow={results[1]}/>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>3</Table.Cell>
-                            <Table.Cell>{results[2] !== undefined ? results[2].die : null}</Table.Cell>
-                            <Table.Cell>{results[2] !== undefined ? results[2].result : null}</Table.Cell>
+                            <DieCell rollRow={results[2]}/>
+                            <ResultCell rollRow={results[2]}/>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>4</Table.Cell>
-                            <Table.Cell>{results[3] !== undefined ? results[3].die : null}</Table.Cell>
-                            <Table.Cell>{results[3] !== undefined ? results[3].result : null}</Table.Cell>
+                            <DieCell rollRow={results[3]}/>
+                            <ResultCell rollRow={results[3]}/>
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>5</Table.Cell>
-                            <Table.Cell>{results[4] !== undefined ? results[4].die : null}</Table.Cell>
-                            <Table.Cell>{results[4] !== undefined ? results[4].result : null}</Table.Cell>
+                            <DieCell rollRow={results[4]}/>
+                            <ResultCell rollRow={results[4]}/>
                         </Table.Row>
                     </Table.Body>
                 </Table>
