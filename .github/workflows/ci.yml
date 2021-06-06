@@ -1,0 +1,50 @@
+name: RocknRoll CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+        scala: [2.13.6]
+        java: [adopt@1.11]
+        
+    steps:
+      - uses: actions/checkout@v1
+      
+      - name: Setup Java and Scala
+        uses: olafurpg/setup-scala@v10
+        with:
+          java-version: ${{ matrix.java }}
+          
+      - name: Cache sbt
+        uses: actions/cache@v1
+        with:
+          path: ~/.sbt
+          key: ${{ runner.os }}-sbt-cache-${{ hashFiles('**/*.sbt') }}-${{ hashFiles('project/build.properties') }}
+          
+      - name: Test rocknroll-core
+        run: |
+          sbt clean compile
+          sbt rocknrollCore/test
+      
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/rocknroll-web/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+            
+      - name: Node ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+          
+      - name: Lint rocknroll-web
+        working-directory: ./rocknroll-web
+        run: |
+          npm i
+          npm run lint
