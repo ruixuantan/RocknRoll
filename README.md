@@ -1,16 +1,32 @@
 # Rock n Roll
 A die rolling application.
 
-## Running the project manually
+## Setting up
+Prerequisites: Install
+JDK 13,
+scala 2.3.15,
+sbt 1.5.3,
+npm 7.14.0
+
 ### Server
-```shell
+```sh
+sbt clean compile
 sbt rocknrollServer/run
 ```
 
+To test rocknroll-core,
+```sh
+sbt rocknrollCore/test
+```
+
 ### Web
-```shell
+```sh
 cd rocknroll-web
 npm run start
+```
+To line rocknroll-web,
+```shell
+cd rocknroll-web
 ```
 
 ## Ports
