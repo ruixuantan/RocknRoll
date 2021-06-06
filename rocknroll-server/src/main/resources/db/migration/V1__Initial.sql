@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS die (
+    id SERIAL PRIMARY KEY,
+    die_sides SMALLINT NOT NULL,
+    frequency INT NOT NULL
+)

@@ -1,0 +1,27 @@
+.die-io {
+  margin: auto;
+  padding: 10px;
+}
+
+.die-command-container {
+  width: 300px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: 230px 70px;
+}
+
+.die-command-input {
+  width: 200px;
+  margin: auto;
+}
+
+.die-io > table {
+  width: 500px;
+  table-layout: fixed;
+  margin: auto;
+}
+
+.die-io > table > th, td {
+  width: 90%;
+  overflow: hidden;
+}

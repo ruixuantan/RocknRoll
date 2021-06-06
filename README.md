@@ -1,13 +1,27 @@
-# Rock n Roll #
-A simple react project configured with webpack for d20 games.
+# Rock n Roll
+A die rolling application.
 
-### Build project ###
-```console
-$ npm install
-$ npm run build
+## Running the project manually
+### Server
+```shell
+sbt rocknrollServer/run
 ```
-To run it locally:
-```console
-$ npm start
+
+### Web
+```shell
+cd rocknroll-web
+npm run start
 ```
-This will run on https://localhost:8080
+
+## Ports
+| Services| Port Number |
+| ------- | ----------- |
+| Server  | 8080        |
+| Postgres| 5432        |
+| Web     | 4200        |
+
+
+## Links
+* [core](rocknroll-core/README.md)
+* [server](rocknroll-server/README.md)
+* [web](rocknroll-web/README.md)
