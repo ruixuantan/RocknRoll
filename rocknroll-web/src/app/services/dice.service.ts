@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { DieContainer } from '../models/Dice';
+import { DieResult, DieRow } from '../models/Dice';
 import { PATHS } from './ServiceConfig';
 
 @Injectable({
@@ -12,15 +12,15 @@ export class DiceService {
 
   constructor(private http: HttpClient) { }
 
-  parseDieInput(input: string): Observable<DieContainer> {
-    return this.http.post<DieContainer>(PATHS.dice, input)
-      .pipe(catchError(this.handleError<DieContainer>()));
+  parseDieInput(input: string): Observable<DieResult> {
+    return this.http.post<DieResult>(PATHS.dice, input)
+      .pipe(catchError(this.handleParseError<DieResult>()));
   }
 
-  private handleError<T>() {
+  private handleParseError<T>() {
     return (error: any): Observable<T> => {
-      console.error("ERROR: " + error);
-      return throwError(error.message);
+      console.error("ERROR: " + error.message);
+      return throwError(error);
     };
   }
 }
