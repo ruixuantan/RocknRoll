@@ -1,12 +1,16 @@
-export interface DieContainer {
-  msg: string
-}
-
 export interface DieResult {
-  input: string,
-  output: string
+  results: string,
+  expected: string,
+  probabilities: string
 }
 
-const emptyDieResult = {input: '', output: ''};
+export interface DieRow {
+  input: string,
+  output: string,
+  expected: string,
+  probability: string
+}
 
-export const DieTemplate: DieResult[] = Array(10).fill(emptyDieResult);
+const emptyDieResult = {input: '', output: '', expected: '', probability: ''};
+
+export const DieTemplate: DieRow[] = Array(10).fill(emptyDieResult);

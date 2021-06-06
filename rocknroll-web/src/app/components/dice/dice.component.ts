@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { DieTemplate, DieResult } from 'src/app/models/Dice';
+import { DieTemplate, DieRow } from 'src/app/models/Dice';
 import { DiceService } from '../../services/dice.service';
-
-
 
 @Component({
   selector: 'app-dice',
@@ -11,21 +9,26 @@ import { DiceService } from '../../services/dice.service';
 })
 export class DiceComponent {
 
-  dieResults: DieResult[] = [...DieTemplate];
-  displayedColumns: string[] = ['input', 'output'];
+  dieResults: DieRow[] = [...DieTemplate];
+  displayedColumns: string[] = ['input', 'output', 'expected', 'probability'];
   dieCommandInput = '';
 
   constructor(private diceService: DiceService) { }
+
+  updateDieResults(input: string, output: string, expected: string, probability: string) {
+    this.dieResults.unshift({input: input, output: output, expected: expected, probability: probability});
+    this.dieResults.pop();
+    this.dieResults = [...this.dieResults];
+  }
 
   parseDieInput(input: string) {
     if (!input) { return; }
     input = input.trim();
     this.diceService.parseDieInput(input)
-      .subscribe(resMsg => {
-        this.dieResults.unshift({ input: input, output: resMsg.msg });
-        this.dieResults.pop();
-        this.dieResults = [...this.dieResults];
-      });
+      .subscribe(
+        res => this.updateDieResults(input, res.results, res.expected, res.probabilities),
+        err => this.updateDieResults(input, err.error, '', '')
+      );
     this.dieCommandInput = '';
   }
 

@@ -22,7 +22,19 @@ class ParserServiceTest extends AnyFunSuite {
     )
   }
 
+  test("ParserService invalid die input") {
+    assert(
+      parserService.parse("10d5 3dD") == InvalidCommand(
+        "Cannot parse input string",
+      ),
+    )
+  }
+
   test("ParserService invalid input") {
-    assert(parserService.parse("invalid") == InvalidCommand)
+    assert(
+      parserService.parse("invalid") == InvalidCommand(
+        "Cannot parse input string",
+      ),
+    )
   }
 }

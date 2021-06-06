@@ -13,10 +13,11 @@
 .die-command-input {
   width: 200px;
   margin: auto;
+  color: aliceblue;
 }
 
 .die-io > table {
-  width: 500px;
+  width: 900px;
   table-layout: fixed;
   margin: auto;
 }
