@@ -9,14 +9,12 @@ import { MaterialModule } from './material.module';
 import { FormsModule } from '@angular/forms';
 
 import { DiceComponent } from './components/dice/dice.component';
-import { HomeComponent } from './components/home/home.component';
 import { HeaderComponent } from './components/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DiceComponent,
-    HomeComponent,
     HeaderComponent,
   ],
   imports: [

@@ -1,19 +1,8 @@
 import { Component } from '@angular/core';
-import { DieContainer, DieResult } from 'src/app/models/Dice';
+import { DieTemplate, DieResult } from 'src/app/models/Dice';
 import { DiceService } from '../../services/dice.service';
 
-const DIE_RESULT_TEMPLATE: DieResult[] = [
-  { input: '', output: '' },
-  { input: '', output: '' },
-  { input: '', output: '' },
-  { input: '', output: '' },
-  { input: '', output: '' },
-  { input: '', output: '' },
-  { input: '', output: '' },
-  { input: '', output: '' },
-  { input: '', output: '' },
-  { input: '', output: '' },
-];
+
 
 @Component({
   selector: 'app-dice',
@@ -22,7 +11,7 @@ const DIE_RESULT_TEMPLATE: DieResult[] = [
 })
 export class DiceComponent {
 
-  dieResults: DieResult[] = [...DIE_RESULT_TEMPLATE];
+  dieResults: DieResult[] = [...DieTemplate];
   displayedColumns: string[] = ['input', 'output'];
   dieCommandInput = '';
 
@@ -41,6 +30,6 @@ export class DiceComponent {
   }
 
   clearTable() {
-    this.dieResults = [...DIE_RESULT_TEMPLATE];
+    this.dieResults = [...DieTemplate];
   }
 }

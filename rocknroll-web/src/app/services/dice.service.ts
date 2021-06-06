@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { DieContainer } from '../models/Dice';
 import { PATHS } from './ServiceConfig';
@@ -17,10 +17,10 @@ export class DiceService {
       .pipe(catchError(this.handleError<DieContainer>()));
   }
 
-  private handleError<T>(result?: T) {
+  private handleError<T>() {
     return (error: any): Observable<T> => {
       console.error("ERROR: " + error);
-      return of(result as T);
+      return throwError(error.message);
     };
   }
 }
