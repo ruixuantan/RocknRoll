@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { DieTemplate, DieRow } from 'src/app/models/Dice';
 import { DiceService } from '../../services/dice.service';
 
-
-
 @Component({
   selector: 'app-dice',
   templateUrl: './dice.component.html',
@@ -28,10 +26,7 @@ export class DiceComponent {
     input = input.trim();
     this.diceService.parseDieInput(input)
       .subscribe(
-        res => {
-          console.log(res)
-          this.updateDieResults(input, res.results, res.expected, res.probabilities);
-        },
+        res => this.updateDieResults(input, res.results, res.expected, res.probabilities),
         err => this.updateDieResults(input, err.error, '', '')
       );
     this.dieCommandInput = '';
