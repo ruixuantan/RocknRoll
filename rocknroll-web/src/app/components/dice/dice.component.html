@@ -1,0 +1,32 @@
+<div class="die-io">
+  <div class="die-command-container">
+    <div>
+      <mat-form-field class="die-command-input" appearance="fill">
+        <mat-label>Roll the die!</mat-label>
+        <input matInput type="text" [(ngModel)]="dieCommandInput" (keydown.enter)="parseDieInput(dieCommandInput)">
+        <button mat-button *ngIf="dieCommandInput" matSuffix mat-icon-button aria-label="Clear"
+          (click)="dieCommandInput=''">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div>
+      <button mat-raised-button (click)="clearTable()" color="accent">Clear</button>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dieResults" class="mat-elevation-z8">
+    <ng-container matColumnDef="input">
+      <th mat-header-cell *matHeaderCellDef>Input</th>
+      <td mat-cell *matCellDef="let element"> {{element.input}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="output">
+      <th mat-header-cell *matHeaderCellDef>Output</th>
+      <td mat-cell *matCellDef="let element"> {{element.output}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+  </table>
+</div>

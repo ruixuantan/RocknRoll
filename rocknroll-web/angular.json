@@ -100,9 +100,21 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
-  "defaultProject": "rocknroll-web"
+  "defaultProject": "rocknroll-web",
+  "cli": {
+    "defaultCollection": "@angular-eslint/schematics"
+  }
 }
