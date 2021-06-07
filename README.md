@@ -8,25 +8,24 @@ scala 2.3.15,
 sbt 1.5.3,
 npm 7.14.0
 
-### Server
+### Compiling and Installing dependencies
 ```sh
-sbt clean compile
-sbt rocknrollServer/run
+./start.sh compile
 ```
 
-To test rocknroll-core,
+### Starting the Server
 ```sh
-sbt rocknrollCore/test
+./start.sh server
 ```
 
-### Web
+### Starting the Front End
 ```sh
-cd rocknroll-web
-npm run start
+./start.sh web
 ```
-To line rocknroll-web,
-```shell
-cd rocknroll-web
+
+### Testing and Linting
+```sh
+./start.sh test
 ```
 
 ## Ports
