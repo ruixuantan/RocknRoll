@@ -1,4 +1,6 @@
 # Rock n Roll
+![example workflow](https://github.com/ruixuantan/rocknroll/actions/workflows/ci.yml/badge.svg)
+
 A die rolling application.
 
 ## Setting up
