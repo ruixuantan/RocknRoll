@@ -2,9 +2,9 @@ package io.github.ruixuantan.rocknroll.server.domain.dice
 
 sealed trait DieResponse
 case class ValidResponse(
-    results: String,
-    expected: String,
-    probabilities: String,
+    results: Int,
+    expected: Double,
+    probabilities: Double,
 ) extends DieResponse
 case class InvalidResponse(
     msg: String,

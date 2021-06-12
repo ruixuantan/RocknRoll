@@ -1,5 +1,7 @@
-package io.github.ruixuantan.rocknroll.core.dice
+package io.github.ruixuantan.rocknroll.core.expressions
 
+import io.github.ruixuantan.rocknroll.core.tokens.DieService
+import io.github.ruixuantan.rocknroll.core.tokens.Value.Die
 import org.scalatest.funsuite.AnyFunSuite
 
 class DieServiceTest extends AnyFunSuite {
