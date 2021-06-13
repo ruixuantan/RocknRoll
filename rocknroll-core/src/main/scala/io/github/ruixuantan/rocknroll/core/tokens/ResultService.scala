@@ -4,7 +4,7 @@ import io.github.ruixuantan.rocknroll.core.tokens.Value.{Die, Number}
 
 class ResultService(dieService: DieService, numberService: NumberService)
     extends ResultAlgebra {
-  override def identity(): Result = Result(0, 0, 0)
+  override def identity(): Result = Result(0, 0)
 
   override def getResult(x: Value): Result =
     x match {
@@ -13,10 +13,10 @@ class ResultService(dieService: DieService, numberService: NumberService)
     }
 
   override def add(x: Result)(y: Result): Result =
-    Result(x.res + y.res, x.expected + y.expected, 1.0)
+    Result(x.res + y.res, x.expected + y.expected)
 
   override def subtract(x: Result)(y: Result): Result =
-    Result(x.res - y.res, x.expected - y.expected, 1.0)
+    Result(x.res - y.res, x.expected - y.expected)
 }
 
 object ResultService {

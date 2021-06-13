@@ -4,7 +4,7 @@ import io.github.ruixuantan.rocknroll.core.tokens.Operator.{Add, Subtract}
 import io.github.ruixuantan.rocknroll.core.tokens.Token
 import io.github.ruixuantan.rocknroll.core.tokens.Value.{Die, Number}
 
-object TokenParser {
+class TokenParser {
   val dieSyntax      = """([1-9]\d{0,1})*d([1-9]\d{0,2})""".r
   val numberSyntax   = """^[1-9]\d*""".r
   val addSyntax      = """\+""".r
@@ -27,4 +27,8 @@ object TokenParser {
       case subtractSyntax(_*) => Right(Subtract)
       case _                  => Left(ParseTokenError)
     }
+}
+
+object TokenParser {
+  def apply(): TokenParser = new TokenParser()
 }

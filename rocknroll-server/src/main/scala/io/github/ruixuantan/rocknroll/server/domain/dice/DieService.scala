@@ -11,7 +11,6 @@ class DieService[F[_]: Applicative] {
         ValidResponse(
           res.res,
           res.expected,
-          res.probability,
         )
       case Left(err) => InvalidResponse(err.msg)
     }

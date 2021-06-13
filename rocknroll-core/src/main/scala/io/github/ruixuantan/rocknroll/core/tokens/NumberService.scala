@@ -4,7 +4,7 @@ import io.github.ruixuantan.rocknroll.core.tokens.Value.Number
 
 class NumberService {
   def getResult(number: Number): Result =
-    Result(number.number, number.number, 1.0)
+    Result(number.number, number.number)
 }
 
 object NumberService {
