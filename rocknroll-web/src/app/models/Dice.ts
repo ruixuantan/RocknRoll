@@ -3,6 +3,11 @@ export interface DieResult {
   expected: string,
 }
 
+export interface DieValidator {
+  isValid: boolean,
+  input: string,
+}
+
 export interface DieRow {
   input: string,
   output: string,

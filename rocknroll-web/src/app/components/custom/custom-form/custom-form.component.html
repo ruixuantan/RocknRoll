@@ -2,14 +2,14 @@
   <mat-card-content>
     <mat-form-field appearance="fill">
       <mat-label>Name</mat-label>
-      <input type="text" matInput [(ngModel)]="custom.name">
+      <input type="text" matInput [(ngModel)]="custom.name" (keydown.enter)="onSaveClick()">
     </mat-form-field>
     <br>
       <mat-form-field appearance="fill">
       <mat-label>Command</mat-label>
-      <input type="text" matInput [(ngModel)]="custom.command">
+      <input type="text" matInput [(ngModel)]="custom.command" (keydown.enter)="onSaveClick()">
     </mat-form-field>
     <br>
-    <button mat-stroked-button color="basic" (click)="onSaveClick()">Save</button>
+    <button mat-stroked-button color="basic" (click)="onSaveClick()" [disabled]="isNotValidCustom()">Save</button>
   </mat-card-content>
 </mat-card>

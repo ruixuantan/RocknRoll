@@ -28,6 +28,16 @@ class TokenParser {
   private def convertToNumber(input: String): Token =
     Number(input.toInt)
 
+  def prettyPrintToken(input: Token): String =
+    input match {
+      case die: Die =>
+        if (die.freq == 1) s"d${die.sides}" else s"${die.freq}d${die.sides}"
+      case number: Number => number.number.toString
+      case Add            => "+"
+      case Subtract       => "-"
+      case Separate       => "/"
+    }
+
   def tokenizeValue(token: String): Either[ParseError, Token] =
     token match {
       case dieSyntax(_*)    => Right(convertToDie(token))

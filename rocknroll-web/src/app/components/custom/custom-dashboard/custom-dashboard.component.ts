@@ -25,7 +25,7 @@ export class CustomDashboardComponent implements OnInit {
     private customService: CustomService) { }
 
   ngOnInit(): void {
-    this.customStore = this.customService.loadCustoms(this.customStore)
+    this.customStore = this.customService.loadCustoms(this.customStore);
     this.displayCustoms = Array.from(this.customStore.store.values());
   }
 
@@ -46,7 +46,7 @@ export class CustomDashboardComponent implements OnInit {
     const deleteAlertData: DeleteAlertData = {
       message: `${custom.name} will be deleted`,
       delete: () => this.customService.deleteCustom(custom),
-    }
+    };
     dialogConfig.data = deleteAlertData;
     this.deleteAlertDialog.open(DeleteAlertDialogComponent, dialogConfig);
   }
