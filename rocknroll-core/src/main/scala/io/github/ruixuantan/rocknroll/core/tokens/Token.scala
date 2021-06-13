@@ -12,4 +12,5 @@ trait Operator extends Token
 object Operator {
   case object Add      extends Operator
   case object Subtract extends Operator
+  case object Separate extends Operator
 }

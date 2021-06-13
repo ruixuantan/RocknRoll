@@ -9,8 +9,8 @@ class DieService[F[_]: Applicative] {
     val response: DieResponse = Service.execute(input) match {
       case Right(res) =>
         ValidResponse(
-          res.res,
-          res.expected,
+          res.map(_.res).mkString(" / "),
+          res.map(_.expected).mkString(" / "),
         )
       case Left(err) => InvalidResponse(err.msg)
     }

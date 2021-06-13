@@ -1,6 +1,10 @@
 package io.github.ruixuantan.rocknroll.core.parser
 
-import io.github.ruixuantan.rocknroll.core.tokens.Operator.{Add, Subtract}
+import io.github.ruixuantan.rocknroll.core.tokens.Operator.{
+  Add,
+  Separate,
+  Subtract,
+}
 import io.github.ruixuantan.rocknroll.core.tokens.Value.{Die, Number}
 import io.github.ruixuantan.rocknroll.core.tokens.{
   DieService,
@@ -22,7 +26,7 @@ class DieParserServiceTest extends AnyFunSuite {
     assert(dieParserService.parse("20") == Right(List(Number(20))))
   }
 
-  test("DieParserService parse d20 + 20 - 2d6") {
+  test("DieParserService parse d20 + 20 -2d6/ 3d2") {
     assert(
       dieParserService.parse("d20 + 20 - 2d6") ==
         Right(List(Die(20, 1), Add, Number(20), Subtract, Die(6, 2))),
@@ -35,15 +39,17 @@ class DieParserServiceTest extends AnyFunSuite {
 
   test("DieParserService eval d20") {
     assert(dieParserService.eval(List(Die(20, 1))) match {
-      case Right(res) => res.expected == 10.5
-      case Left(_)    => false
+      case Right(results) =>
+        println(results)
+        results.map(_.expected) == List(10.5)
+      case Left(_) => false
     })
   }
 
   test("DieParserService eval 12") {
     assert(dieParserService.eval(List(Number(12))) match {
-      case Right(res) => res.expected == 12
-      case Left(_)    => false
+      case Right(results) => results.map(_.expected) == List(12)
+      case Left(_)        => false
     })
   }
 
@@ -52,8 +58,8 @@ class DieParserServiceTest extends AnyFunSuite {
       dieParserService.eval(
         List(Die(20, 1), Add, Number(20), Subtract, Die(6, 2)),
       ) match {
-        case Right(res) => res.expected == 23.5
-        case Left(_)    => false
+        case Right(results) => results.map(_.expected) == List(23.5)
+        case Left(_)        => false
       },
     )
   }
@@ -63,8 +69,19 @@ class DieParserServiceTest extends AnyFunSuite {
       dieParserService.eval(
         List(Number(1), Subtract, Die(20, 1)),
       ) match {
-        case Right(res) => res.expected == -9.5
-        case Left(_)    => false
+        case Right(results) => results.map(_.expected) == List(-9.5)
+        case Left(_)        => false
+      },
+    )
+  }
+
+  test("DieParserService eval d20/3d6 + 8") {
+    assert(
+      dieParserService.eval(
+        List(Die(20, 1), Separate, Die(6, 3), Add, Number(8)),
+      ) match {
+        case Right(results) => results.map(_.expected) == List(10.5, 18.5)
+        case Left(_)        => false
       },
     )
   }

@@ -9,16 +9,21 @@ import io.github.ruixuantan.rocknroll.core.tokens.{
   Token,
   Value,
 }
-import io.github.ruixuantan.rocknroll.core.tokens.Operator.{Add, Subtract}
+import io.github.ruixuantan.rocknroll.core.tokens.Operator.{
+  Add,
+  Separate,
+  Subtract,
+}
 
 import scala.annotation.tailrec
+import scala.collection.mutable.ListBuffer
 
 class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
     extends DieParserAlgebra {
   val splitChar = ' '
 
   override def parse(input: String): Either[ParseError, List[Token]] =
-    input.split(splitChar).map(str => tokenParser.tokenize(str)).toList.sequence
+    tokenParser.parse(input.replaceAll("\\s", ""))
 
   private def getExpressionValue(
       value: Value,
@@ -40,7 +45,7 @@ class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
       tokens: List[Token],
       acc: Expression,
   ): Either[ParseOrderError.type, Result] =
-    if (tokens.headOption.isEmpty) {
+    if (tokens.isEmpty) {
       acc match {
         case exprValue: ExpressionValue => Right(exprValue.res)
         case _                          => Left(ParseOrderError)
@@ -62,12 +67,29 @@ class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
       }
     }
 
-  override def eval(tokens: List[Token]): Either[ParseError, Result] = {
+  override def eval(tokens: List[Token]): Either[ParseError, List[Result]] = {
     val initial = ExpressionEval(resultAlgebra.add(resultAlgebra.identity))
-    evalHelper(tokens, initial) match {
-      case Right(res) => Right(res)
-      case Left(err)  => Left(err)
-    }
+
+    @tailrec
+    def evalInner(
+        tokens: List[Token],
+        tokenBuffer: ListBuffer[Token],
+        lsBuffer: ListBuffer[List[Token]],
+    ): List[List[Token]] =
+      if (tokens.isEmpty)
+        lsBuffer.addOne(tokenBuffer.toList).toList
+      else if (tokens.head == Separate)
+        evalInner(
+          tokens.tail,
+          new ListBuffer[Token](),
+          lsBuffer.addOne(tokenBuffer.toList),
+        )
+      else
+        evalInner(tokens.tail, tokenBuffer.addOne(tokens.head), lsBuffer)
+
+    evalInner(tokens, new ListBuffer[Token](), new ListBuffer[List[Token]]())
+      .map(tokenList => evalHelper(tokenList, initial))
+      .sequence
   }
 }
 

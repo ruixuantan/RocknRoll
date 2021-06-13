@@ -13,7 +13,7 @@ import io.github.ruixuantan.rocknroll.core.tokens.{
 }
 
 object Service {
-  def execute(input: String): Either[ParseError, Result] = {
+  def execute(input: String): Either[ParseError, List[Result]] = {
     val diceService      = DieService()
     val numberService    = NumberService()
     val resultService    = ResultService(diceService, numberService)
