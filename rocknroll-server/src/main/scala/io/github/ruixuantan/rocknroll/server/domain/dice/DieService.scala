@@ -2,22 +2,17 @@ package io.github.ruixuantan.rocknroll.server.domain.dice
 
 import cats.Applicative
 import cats.implicits._
-import io.github.ruixuantan.rocknroll.core.DieRoller
-import io.github.ruixuantan.rocknroll.core.commands.{
-  DieCommandResult,
-  InvalidCommandResult,
-}
+import io.github.ruixuantan.rocknroll.core.Service
 
 class DieService[F[_]: Applicative] {
   def parse(input: String): F[DieResponse] = {
-    val response: DieResponse = DieRoller.execute(input) match {
-      case invalid: InvalidCommandResult => InvalidResponse(invalid.msg)
-      case valid: DieCommandResult =>
+    val response: DieResponse = Service.execute(input) match {
+      case Right(res) =>
         ValidResponse(
-          valid.rolls.mkString(", "),
-          valid.expected.mkString(", "),
-          valid.probabilities.mkString(", "),
+          res.map(_.res).mkString(" / "),
+          res.map(_.expected).mkString(" / "),
         )
+      case Left(err) => InvalidResponse(err.msg)
     }
     response.pure[F]
   }
