@@ -1,0 +1,14 @@
+.delete-alert-dialog {
+  width: 200px;
+}
+
+.delete-alert-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: auto;
+  margin: auto;
+}
+
+.delete-alert-buttons > button {
+  width: 80px;
+}

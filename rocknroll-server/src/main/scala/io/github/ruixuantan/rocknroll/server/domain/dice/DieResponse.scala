@@ -8,3 +8,7 @@ case class ValidResponse(
 case class InvalidResponse(
     msg: String,
 ) extends DieResponse
+case class ValidateResponse(
+    isValid: Boolean,
+    input: String,
+) extends DieResponse

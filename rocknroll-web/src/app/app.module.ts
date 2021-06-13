@@ -10,12 +10,20 @@ import { FormsModule } from '@angular/forms';
 
 import { DiceComponent } from './components/dice/dice.component';
 import { HeaderComponent } from './components/header/header.component';
+import { CustomComponent } from './components/custom/custom.component';
+import { CustomDashboardComponent } from './components/custom/custom-dashboard/custom-dashboard.component';
+import { CustomFormComponent } from './components/custom/custom-form/custom-form.component';
+import { DeleteAlertDialogComponent } from './components/shared/delete-alert-dialog/delete-alert-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     DiceComponent,
     HeaderComponent,
+    CustomComponent,
+    CustomDashboardComponent,
+    CustomFormComponent,
+    DeleteAlertDialogComponent
   ],
   imports: [
     BrowserModule,

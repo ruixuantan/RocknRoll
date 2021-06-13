@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { DieTemplate, DieRow } from 'src/app/models/Dice';
+import { CustomService } from 'src/app/services/custom.service';
 import { DiceService } from '../../services/dice.service';
 
 @Component({
@@ -13,7 +14,7 @@ export class DiceComponent {
   displayedColumns: string[] = ['input', 'output', 'expected'];
   dieCommandInput = '';
 
-  constructor(private diceService: DiceService) { }
+  constructor(private diceService: DiceService, private customService: CustomService) { }
 
   updateDieResults(input: string, output: string, expected: string) {
     this.dieResults.unshift({input: input, output: output, expected: expected});
@@ -24,10 +25,16 @@ export class DiceComponent {
   parseDieInput(input: string) {
     if (!input) { return; }
     input = input.trim();
+    let displayInput = input;
+    try {
+      const custom = this.customService.getCustom(input);
+      input = custom.command;
+      displayInput = custom.name;
+    } catch (err) { }
     this.diceService.parseDieInput(input)
       .subscribe(
-        res => this.updateDieResults(input, res.results, res.expected),
-        err => this.updateDieResults(input, err.error, '')
+        res => this.updateDieResults(displayInput, res.results, res.expected),
+        err => this.updateDieResults(displayInput, err.error, '')
       );
     this.dieCommandInput = '';
   }
