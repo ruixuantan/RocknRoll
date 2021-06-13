@@ -1,0 +1,22 @@
+.custom-util-container {
+  margin: auto;
+  width: 100px;
+}
+
+.custom-dashboard-container > table {
+  width: 800px;
+  table-layout: fixed;
+  margin: auto;
+}
+
+.mat-column-name {
+  width: 200px;
+}
+
+.mat-column-command {
+  width: 400px;
+}
+
+.max-column-action {
+  width: 100px;
+}

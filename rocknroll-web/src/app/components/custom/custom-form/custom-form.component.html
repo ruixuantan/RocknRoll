@@ -1,0 +1,15 @@
+<mat-card class="custom-dialog-form">
+  <mat-card-content>
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input type="text" matInput [(ngModel)]="custom.name">
+    </mat-form-field>
+    <br>
+      <mat-form-field appearance="fill">
+      <mat-label>Command</mat-label>
+      <input type="text" matInput [(ngModel)]="custom.command">
+    </mat-form-field>
+    <br>
+    <button mat-stroked-button color="basic" (click)="onSaveClick()">Save</button>
+  </mat-card-content>
+</mat-card>
