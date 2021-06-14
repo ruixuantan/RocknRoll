@@ -1,7 +1,7 @@
 package io.github.ruixuantan.rocknroll.core.tokens
 
 trait ResultAlgebra {
-  def identity(): Result
+  def identity: Result
 
   def getResult(value: Value): Result
 

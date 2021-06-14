@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Custom } from 'src/app/models/Custom';
 import { CustomService } from 'src/app/services/custom.service';
 import { DiceService } from 'src/app/services/dice.service';
+import {Paths} from "../../../paths";
 
 @Component({
   selector: 'app-custom-form',
@@ -29,16 +30,16 @@ export class CustomFormComponent {
     this.diceService.validateDieInput(this.custom.command)
       .subscribe(
         res => {
-          res.isValid 
+          res.isValid
             ? this.saveCustom(res.input)
-            : this.openSnackBar("Command is invalid");
+            : this.openSnackBar("Command is invalid", "Dismiss");
         },
         err => console.error(err)
       );
   }
 
-  openSnackBar(msg: string) {
-    this.snackBar.open(msg, "Dismiss", {
+  openSnackBar(msg: string, action: string) {
+    this.snackBar.open(msg, action, {
       duration: 3000
     });
   }
@@ -46,7 +47,7 @@ export class CustomFormComponent {
   saveCustom(input: string) {
     this.custom.command = input;
     this.customService.storeCustom(this.custom);
-    window.location.href = '/customs';
+    window.location.href = Paths.customs;
   }
 
   isNotValidCustom() {
