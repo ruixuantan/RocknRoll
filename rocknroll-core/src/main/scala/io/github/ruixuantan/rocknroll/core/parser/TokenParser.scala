@@ -75,7 +75,7 @@ class TokenParser {
         case Right(tokenValue) =>
           Right(
             lsBuffer.addOne(tokenValue).addOne(tokenOp),
-            input.substring(1),
+            input.tail,
           )
         case Left(_) => Left(ParseTokenError)
       }
@@ -89,12 +89,12 @@ class TokenParser {
       if (input.isEmpty)
         handleEmptyInput(inputToken, lsBuffer, input)
       else {
-        val nextChar = input.take(1)
+        val nextChar = input.head.toString
         tokenizeOperator(nextChar) match {
           case Right(tokenOp) =>
             handleIsTokenOperator(inputToken, tokenOp, lsBuffer, input)
           case Left(_) =>
-            parseTokenInner(inputToken + nextChar, input.substring(1))
+            parseTokenInner(inputToken + nextChar, input.tail)
         }
       }
     }

@@ -13,7 +13,7 @@ import io.github.ruixuantan.rocknroll.core.tokens.{
   Token,
 }
 
-object Service {
+object CoreService extends CoreAlgebra {
 
   val diceService      = DieService()
   val numberService    = NumberService()
@@ -21,15 +21,15 @@ object Service {
   val tokenParser      = TokenParser()
   val dieParserService = DieParserService(tokenParser, resultService)
 
-  def parse(input: String): Either[ParseError, List[Token]] =
+  override def parse(input: String): Either[ParseError, List[Token]] =
     dieParserService.parse(input)
 
-  def prettyPrint(tokens: List[Token]) =
-    tokens.map(token => tokenParser.prettyPrintToken(token)).mkString(" ")
+  override def validate(tokens: List[Token]): Boolean =
+    dieParserService.validate(tokens)
 
-  def execute(input: String): Either[ParseError, List[Result]] =
-    for {
-      tokens <- dieParserService.parse(input)
-      res    <- dieParserService.eval(tokens)
-    } yield res
+  override def eval(tokens: List[Token]): Either[ParseError, List[Result]] =
+    dieParserService.eval(tokens)
+
+  override def prettyPrint(tokens: List[Token]): String =
+    tokens.map(token => tokenParser.prettyPrintToken(token)).mkString(" ")
 }

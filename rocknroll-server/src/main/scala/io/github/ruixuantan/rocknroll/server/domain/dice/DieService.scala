@@ -2,18 +2,19 @@ package io.github.ruixuantan.rocknroll.server.domain.dice
 
 import cats.Applicative
 import cats.implicits._
-import io.github.ruixuantan.rocknroll.core.Service
+import io.github.ruixuantan.rocknroll.core.CoreService
 
 class DieService[F[_]: Applicative] {
   def validate(input: String): F[DieResponse] = {
-    val response: DieResponse = Service.execute(input) match {
-      case Right(_) =>
+    val tokens = for {
+      tokens <- CoreService.parse(input)
+    } yield tokens
+
+    val response: DieResponse = tokens match {
+      case Right(t) =>
         ValidateResponse(
-          true,
-          Service.parse(input) match {
-            case Right(tokens) => Service.prettyPrint(tokens)
-            case Left(_)       => input
-          },
+          CoreService.validate(t),
+          CoreService.prettyPrint(t),
         )
       case Left(_) => ValidateResponse(false, input)
     }
@@ -21,7 +22,12 @@ class DieService[F[_]: Applicative] {
   }
 
   def eval(input: String): F[DieResponse] = {
-    val response: DieResponse = Service.execute(input) match {
+    val results = for {
+      tokens <- CoreService.parse(input)
+      res    <- CoreService.eval(tokens)
+    } yield res
+
+    val response: DieResponse = results match {
       case Right(res) =>
         ValidResponse(
           res.map(_.res).mkString(" / "),

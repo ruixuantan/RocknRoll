@@ -37,6 +37,42 @@ class DieParserServiceTest extends AnyFunSuite {
     assert(dieParserService.parse("d20 + 42.3") == Left(ParseTokenError))
   }
 
+  test("DieParserService validate d20") {
+    assert(dieParserService.validate(List(Die(20, 1))))
+  }
+
+  test("DieParserService validate 20") {
+    assert(dieParserService.validate(List(Number(20))))
+  }
+
+  test("DieParserService validate 20 + 2d20 - 3 / d4 + 6") {
+    assert(
+      dieParserService.validate(
+        List(
+          Number(20),
+          Add,
+          Die(20, 2),
+          Subtract,
+          Number(3),
+          Separate,
+          Die(4, 1),
+          Add,
+          Number(6),
+        ),
+      ),
+    )
+  }
+
+  test("DieParserService validate invalid 20 -") {
+    assert(!dieParserService.validate(List(Number(20), Subtract)))
+  }
+
+  test("DieParserService validate invalid 20 - + 3d4") {
+    assert(
+      !dieParserService.validate(List(Number(20), Subtract, Add, Die(4, 3))),
+    )
+  }
+
   test("DieParserService eval d20") {
     assert(dieParserService.eval(List(Die(20, 1))) match {
       case Right(results) =>

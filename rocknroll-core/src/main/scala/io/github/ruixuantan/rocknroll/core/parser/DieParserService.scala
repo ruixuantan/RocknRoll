@@ -22,9 +22,6 @@ class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
     extends DieParserAlgebra {
   val splitChar = ' '
 
-  override def parse(input: String): Either[ParseError, List[Token]] =
-    tokenParser.parse(input.replaceAll("\\s", ""))
-
   private def getExpressionValue(
       value: Value,
       exprEval: ExpressionEval,
@@ -39,6 +36,28 @@ class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
       case Add      => ExpressionEval(resultAlgebra.add(exprValue.res))
       case Subtract => ExpressionEval(resultAlgebra.subtract(exprValue.res))
     }
+
+  override def parse(input: String): Either[ParseError, List[Token]] =
+    tokenParser.parse(input.replaceAll("\\s", ""))
+
+  override def validate(tokens: List[Token]): Boolean = {
+    @tailrec
+    def validateInner(tokens: List[Token], prev: Token): Boolean =
+      if (tokens.length == 1) {
+        tokens.head.isInstanceOf[Value]
+      } else {
+        prev match {
+          case _: Value =>
+            tokens.head
+              .isInstanceOf[Operator] && validateInner(tokens.tail, tokens.head)
+          case _: Operator =>
+            tokens.head
+              .isInstanceOf[Value] && validateInner(tokens.tail, tokens.head)
+        }
+      }
+
+    validateInner(tokens, Operator.Add)
+  }
 
   @tailrec
   private def evalHelper(
