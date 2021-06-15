@@ -5,11 +5,10 @@ import io.github.ruixuantan.rocknroll.core.parser.{
   ParseError,
   TokenParser,
 }
+import io.github.ruixuantan.rocknroll.core.results.{Result, ResultService}
 import io.github.ruixuantan.rocknroll.core.tokens.{
   DieService,
   NumberService,
-  Result,
-  ResultService,
   Token,
 }
 

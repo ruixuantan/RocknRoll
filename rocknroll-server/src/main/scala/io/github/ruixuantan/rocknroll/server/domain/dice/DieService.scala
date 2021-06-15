@@ -2,29 +2,29 @@ package io.github.ruixuantan.rocknroll.server.domain.dice
 
 import cats.Applicative
 import cats.implicits._
-import io.github.ruixuantan.rocknroll.core.CoreService
+import io.github.ruixuantan.rocknroll.core.CoreAlgebra
 
-class DieService[F[_]: Applicative] {
+class DieService[F[_]: Applicative](coreAlgebra: CoreAlgebra) {
   def validate(input: String): F[DieResponse] = {
     val tokens = for {
-      tokens <- CoreService.parse(input)
+      tokens <- coreAlgebra.parse(input)
     } yield tokens
 
     val response: DieResponse = tokens match {
       case Right(t) =>
         ValidateResponse(
-          CoreService.validate(t),
-          CoreService.prettyPrint(t),
+          coreAlgebra.validate(t),
+          coreAlgebra.prettyPrint(t),
         )
-      case Left(_) => ValidateResponse(false, input)
+      case Left(_) => ValidateResponse(isValid = false, input)
     }
     response.pure[F]
   }
 
   def eval(input: String): F[DieResponse] = {
     val results = for {
-      tokens <- CoreService.parse(input)
-      res    <- CoreService.eval(tokens)
+      tokens <- coreAlgebra.parse(input)
+      res    <- coreAlgebra.eval(tokens)
     } yield res
 
     val response: DieResponse = results match {
@@ -40,6 +40,6 @@ class DieService[F[_]: Applicative] {
 }
 
 object DieService {
-  def apply[F[_]: Applicative]() =
-    new DieService[F]()
+  def apply[F[_]: Applicative](coreAlgebra: CoreAlgebra) =
+    new DieService[F](coreAlgebra)
 }

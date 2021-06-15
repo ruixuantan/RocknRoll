@@ -1,14 +1,12 @@
 package io.github.ruixuantan.rocknroll.core.parser
 
 import cats.implicits._
-import io.github.ruixuantan.rocknroll.core.tokens.{
-  Operator,
+import io.github.ruixuantan.rocknroll.core.results.{
   Result,
   ResultAlgebra,
   ResultService,
-  Token,
-  Value,
 }
+import io.github.ruixuantan.rocknroll.core.tokens.{Operator, Token, Value}
 import io.github.ruixuantan.rocknroll.core.tokens.Operator.{
   Add,
   Separate,

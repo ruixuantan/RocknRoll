@@ -5,11 +5,8 @@ import io.github.ruixuantan.rocknroll.core.tokens.Operator.{
   Separate,
   Subtract,
 }
-import io.github.ruixuantan.rocknroll.core.tokens.Token
 import io.github.ruixuantan.rocknroll.core.tokens.Value.{Die, Number}
 import org.scalatest.funsuite.AnyFunSuite
-
-import scala.collection.mutable.ListBuffer
 
 class TokenParserTest extends AnyFunSuite {
   private val tokenParser = TokenParser()

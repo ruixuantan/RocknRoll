@@ -1,6 +1,6 @@
 package io.github.ruixuantan.rocknroll.core.parser
 
-import io.github.ruixuantan.rocknroll.core.tokens.Result
+import io.github.ruixuantan.rocknroll.core.results.Result
 
 sealed trait Expression
 case class ExpressionValue(res: Result)         extends Expression

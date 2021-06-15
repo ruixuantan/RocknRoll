@@ -1,7 +1,8 @@
 package io.github.ruixuantan.rocknroll.core
 
 import io.github.ruixuantan.rocknroll.core.parser.ParseError
-import io.github.ruixuantan.rocknroll.core.tokens.{Result, Token}
+import io.github.ruixuantan.rocknroll.core.results.Result
+import io.github.ruixuantan.rocknroll.core.tokens.Token
 
 trait CoreAlgebra {
   def parse(input: String): Either[ParseError, List[Token]]

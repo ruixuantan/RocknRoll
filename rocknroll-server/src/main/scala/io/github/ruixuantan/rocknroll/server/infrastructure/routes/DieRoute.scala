@@ -21,10 +21,10 @@ class DieRoute[F[_]: Sync] extends Http4sDsl[F] {
         msg <- req.as[String]
         res <- dieService
           .validate(msg)
-          .flatMap(_ match {
+          .flatMap {
             case response: ValidateResponse => Ok(response)
             case _                          => InternalServerError()
-          })
+          }
       } yield res
     }
 
@@ -34,10 +34,10 @@ class DieRoute[F[_]: Sync] extends Http4sDsl[F] {
         msg <- req.as[String]
         res <- dieService
           .eval(msg)
-          .flatMap(_ match {
+          .flatMap {
             case response: InvalidResponse => BadRequest(response.msg)
             case response: ValidResponse   => Ok(response)
-          })
+          }
       } yield res
     }
 

@@ -1,4 +1,4 @@
-package io.github.ruixuantan.rocknroll.core.tokens
+package io.github.ruixuantan.rocknroll.core.results
 
 case class Result(
     res: Int,

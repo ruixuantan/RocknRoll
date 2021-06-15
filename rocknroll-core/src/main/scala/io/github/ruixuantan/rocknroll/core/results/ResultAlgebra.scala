@@ -1,4 +1,6 @@
-package io.github.ruixuantan.rocknroll.core.tokens
+package io.github.ruixuantan.rocknroll.core.results
+
+import io.github.ruixuantan.rocknroll.core.tokens.Value
 
 trait ResultAlgebra {
   def identity: Result

@@ -1,16 +1,13 @@
 package io.github.ruixuantan.rocknroll.core.parser
 
+import io.github.ruixuantan.rocknroll.core.results.ResultService
 import io.github.ruixuantan.rocknroll.core.tokens.Operator.{
   Add,
   Separate,
   Subtract,
 }
 import io.github.ruixuantan.rocknroll.core.tokens.Value.{Die, Number}
-import io.github.ruixuantan.rocknroll.core.tokens.{
-  DieService,
-  NumberService,
-  ResultService,
-}
+import io.github.ruixuantan.rocknroll.core.tokens.{DieService, NumberService}
 import org.scalatest.funsuite.AnyFunSuite
 
 class DieParserServiceTest extends AnyFunSuite {

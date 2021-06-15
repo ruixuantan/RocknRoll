@@ -1,5 +1,6 @@
 package io.github.ruixuantan.rocknroll.core.tokens
 
+import io.github.ruixuantan.rocknroll.core.results.{Result, ResultService}
 import io.github.ruixuantan.rocknroll.core.tokens.Value.{Die, Number}
 import org.scalatest.funsuite.AnyFunSuite
 

@@ -18,6 +18,7 @@ import doobie.util.ExecutionContexts
 import infrastructure.routes.{DieRoute, RoutePaths}
 import io.circe.config.parser
 import io.circe.generic.codec.DerivedAsObjectCodec.deriveCodec
+import io.github.ruixuantan.rocknroll.core.CoreService
 import io.github.ruixuantan.rocknroll.server.domain.dice.DieService
 import org.http4s.HttpRoutes
 import org.http4s.server.{Router, Server => BlazeServer}
@@ -78,7 +79,8 @@ object Server extends IOApp {
       conf <- config[F]
       _    <- dbMigrate[F](conf.db)
       xa   <- dbTransactor[F](conf.db)
-      dieService = DieService[F]()
+      coreService = CoreService
+      dieService  = DieService[F](coreService)
       routes = Router(
         RoutePaths.DieRoutePath.path -> CORS(DieRoute.endpoints[F](dieService)),
       )
