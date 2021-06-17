@@ -11,5 +11,5 @@ trait CoreAlgebra {
 
   def eval(tokens: List[Token]): Either[ParseError, List[Result]]
 
-  def prettyPrint(tokens: List[Token]): String
+  def prettyPrint(tokens: List[Token], delimiter: String = " "): String
 }

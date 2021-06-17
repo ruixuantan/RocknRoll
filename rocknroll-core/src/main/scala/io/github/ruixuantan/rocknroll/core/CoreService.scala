@@ -29,6 +29,9 @@ object CoreService extends CoreAlgebra {
   override def eval(tokens: List[Token]): Either[ParseError, List[Result]] =
     dieParserService.eval(tokens)
 
-  override def prettyPrint(tokens: List[Token]): String =
-    tokens.map(token => tokenParser.prettyPrintToken(token)).mkString(" ")
+  override def prettyPrint(
+      tokens: List[Token],
+      delimiter: String,
+  ): String =
+    tokens.map(token => tokenParser.prettyPrintToken(token)).mkString(delimiter)
 }
