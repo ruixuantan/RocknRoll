@@ -15,16 +15,20 @@ import cats.effect.{
 import config.{DbConfig, DbMigrator, LogConfig, RocknRollConfig, ServerConfig}
 import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
-import infrastructure.routes.{DieRoute, RoutePaths}
+import infrastructure.routes.{DieRoute, RoutePaths, StatsRoute}
 import io.circe.config.parser
 import io.circe.generic.codec.DerivedAsObjectCodec.deriveCodec
 import io.github.ruixuantan.rocknroll.core.CoreService
 import io.github.ruixuantan.rocknroll.server.domain.dice.DieService
+import io.github.ruixuantan.rocknroll.server.domain.stats.StatsService
+import io.github.ruixuantan.rocknroll.server.infrastructure.repository.{
+  DieCountRepository,
+  ResultsRepository,
+}
 import org.http4s.HttpRoutes
 import org.http4s.server.{Router, Server => BlazeServer}
 import org.http4s.server.blaze.BlazeServerBuilder
 import org.http4s.server.middleware.Logger
-import org.http4s.server.middleware._
 
 import scala.concurrent.ExecutionContext.Implicits.global
 
@@ -79,10 +83,19 @@ object Server extends IOApp {
       conf <- config[F]
       _    <- dbMigrate[F](conf.db)
       xa   <- dbTransactor[F](conf.db)
-      coreService = CoreService
-      dieService  = DieService[F](coreService)
+      coreService        = CoreService
+      dieCountRepository = DieCountRepository[F](xa)
+      resultsRepository  = ResultsRepository[F](xa)
+      dieService = DieService[F](
+        coreService,
+      )
+      statsService = StatsService[F](
+        dieCountRepository,
+        resultsRepository,
+      )
       routes = Router(
-        RoutePaths.DieRoutePath.path -> CORS(DieRoute.endpoints[F](dieService)),
+        RoutePaths.DieRoutePath.path   -> DieRoute.endpoints[F](dieService),
+        RoutePaths.StatsRoutePath.path -> StatsRoute.endpoints[F](statsService),
       )
       loggedRts = loggedRoutes(conf.log, routes)
       svr <- server[F](conf.server, loggedRts)

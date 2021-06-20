@@ -1,4 +1,5 @@
 export const Paths = {
   "dice": "",
-  "customs": "customs"
+  "customs": "customs",
+  "stats": "stats"
 };

@@ -1,11 +1,7 @@
 package io.github.ruixuantan.rocknroll.core.parser
 
 import cats.implicits._
-import io.github.ruixuantan.rocknroll.core.results.{
-  Result,
-  ResultAlgebra,
-  ResultService,
-}
+import io.github.ruixuantan.rocknroll.core.results.{Result, ResultAlgebra}
 import io.github.ruixuantan.rocknroll.core.tokens.{Operator, Token, Value}
 import io.github.ruixuantan.rocknroll.core.tokens.Operator.{
   Add,
@@ -120,6 +116,6 @@ class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
 }
 
 object DieParserService {
-  def apply(tokenParser: TokenParser, resultService: ResultService) =
+  def apply(tokenParser: TokenParser, resultService: ResultAlgebra) =
     new DieParserService(tokenParser, resultService)
 }

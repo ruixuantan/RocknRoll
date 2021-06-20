@@ -12,6 +12,7 @@ import io.github.ruixuantan.rocknroll.server.domain.dice.{
 import org.http4s.HttpRoutes
 import org.http4s.circe.CirceEntityCodec.circeEntityEncoder
 import org.http4s.dsl.Http4sDsl
+import org.http4s.server.middleware.CORS
 
 class DieRoute[F[_]: Sync] extends Http4sDsl[F] {
 
@@ -35,14 +36,15 @@ class DieRoute[F[_]: Sync] extends Http4sDsl[F] {
         res <- dieService
           .eval(msg)
           .flatMap {
-            case response: InvalidResponse => BadRequest(response.msg)
             case response: ValidResponse   => Ok(response)
+            case response: InvalidResponse => BadRequest(response.msg)
+            case _                         => InternalServerError()
           }
       } yield res
     }
 
   def endPoints(dieService: DieService[F]): HttpRoutes[F] =
-    validateEndPoint(dieService) <+> evalEndPoint(dieService)
+    CORS(validateEndPoint(dieService)) <+> CORS(evalEndPoint(dieService))
 }
 
 object DieRoute {

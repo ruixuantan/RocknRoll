@@ -8,5 +8,6 @@ import {Paths} from "../../paths";
 })
 export class HeaderComponent {
   customPath = `/${Paths.customs}/`
+  statsPath = `/${Paths.stats}/`
   constructor() { }
 }
