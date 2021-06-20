@@ -16,6 +16,11 @@ export class StatsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.statsService.getDieCount()
+      .subscribe(
+        data => this.dieCountList == data,
+        err => console.error(err)
+      );
   }
 
   countTotalRolls() {
