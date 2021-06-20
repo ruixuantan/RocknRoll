@@ -14,6 +14,7 @@ import { CustomComponent } from './components/custom/custom.component';
 import { CustomDashboardComponent } from './components/custom/custom-dashboard/custom-dashboard.component';
 import { CustomFormComponent } from './components/custom/custom-form/custom-form.component';
 import { DeleteAlertDialogComponent } from './components/shared/delete-alert-dialog/delete-alert-dialog.component';
+import { StatsComponent } from './components/stats/stats.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { DeleteAlertDialogComponent } from './components/shared/delete-alert-dia
     CustomComponent,
     CustomDashboardComponent,
     CustomFormComponent,
-    DeleteAlertDialogComponent
+    DeleteAlertDialogComponent,
+    StatsComponent
   ],
   imports: [
     BrowserModule,

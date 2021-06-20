@@ -46,6 +46,9 @@ lazy val dependencies = new {
 
   val flywayV = "7.9.1"
   val flyway  = "org.flywaydb" % "flyway-core" % flywayV
+
+  val scalaJV = "2.4.2"
+  val scalaJ  = "org.scalaj" %% "scalaj-http" % scalaJV
 }
 
 lazy val commonDependencies = Seq(
@@ -82,5 +85,6 @@ lazy val rocknrollServer = (project in file("rocknroll-server"))
       dependencies.doobieHikari,
       dependencies.doobiePg,
       dependencies.flyway,
+      dependencies.scalaJ,
     ),
   )

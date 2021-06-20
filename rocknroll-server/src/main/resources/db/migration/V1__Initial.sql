@@ -1,5 +1,11 @@
-CREATE TABLE IF NOT EXISTS die (
-    id SERIAL PRIMARY KEY,
-    die_sides SMALLINT NOT NULL,
+CREATE TABLE IF NOT EXISTS die_count (
+    die_side SERIAL PRIMARY KEY,
     frequency INT NOT NULL
-)
+);
+
+CREATE TABLE IF NOT EXISTS results (
+    id SERIAL PRIMARY KEY,
+    input_string VARCHAR NOT NULL,
+    result VARCHAR NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

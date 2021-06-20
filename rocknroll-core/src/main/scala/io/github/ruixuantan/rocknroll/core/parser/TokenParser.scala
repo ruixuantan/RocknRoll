@@ -54,31 +54,15 @@ class TokenParser {
     }
 
   def parse(input: String): Either[ParseError, List[Token]] = {
-
-    def handleEmptyInput(
-        inputToken: String,
-        lsBuffer: ListBuffer[Token],
-        input: String,
-    ): Either[ParseError, (ListBuffer[Token], String)] =
-      tokenizeValue(inputToken) match {
-        case Right(t) => Right(lsBuffer.addOne(t), input)
-        case Left(_)  => Left(ParseTokenError)
-      }
-
     def handleIsTokenOperator(
         inputToken: String,
         tokenOp: Token,
         lsBuffer: ListBuffer[Token],
         input: String,
     ): Either[ParseError, (ListBuffer[Token], String)] =
-      tokenizeValue(inputToken) match {
-        case Right(tokenValue) =>
-          Right(
-            lsBuffer.addOne(tokenValue).addOne(tokenOp),
-            input.substring(1),
-          )
-        case Left(_) => Left(ParseTokenError)
-      }
+      for {
+        tokenVal <- tokenizeValue(inputToken)
+      } yield (lsBuffer.addOne(tokenVal).addOne(tokenOp), input.tail)
 
     @tailrec
     def parseTokenInner(
@@ -87,36 +71,36 @@ class TokenParser {
     ): Either[ParseError, (ListBuffer[Token], String)] = {
       val lsBuffer = new ListBuffer[Token]()
       if (input.isEmpty)
-        handleEmptyInput(inputToken, lsBuffer, input)
+        for {
+          token <- tokenizeValue(inputToken)
+        } yield (lsBuffer.addOne(token), input)
       else {
-        val nextChar = input.take(1)
+        val nextChar = input.head.toString
         tokenizeOperator(nextChar) match {
           case Right(tokenOp) =>
             handleIsTokenOperator(inputToken, tokenOp, lsBuffer, input)
           case Left(_) =>
-            parseTokenInner(inputToken + nextChar, input.substring(1))
+            parseTokenInner(inputToken + nextChar, input.tail)
         }
       }
     }
 
-    @tailrec
     def parseInner(
         input: String,
         lsBuffer: ListBuffer[Token],
     ): Either[ParseError, ListBuffer[Token]] =
-      parseTokenInner("", input) match {
-        case Left(_) => Left(ParseTokenError)
-        case Right(pair) =>
+      for {
+        pair <- parseTokenInner("", input)
+        parsedBuffer <-
           if (pair._2.isEmpty)
             Right(lsBuffer ++ pair._1)
           else
             parseInner(pair._2, lsBuffer ++ pair._1)
-      }
+      } yield parsedBuffer
 
-    parseInner(input, new ListBuffer[Token]()) match {
-      case Right(lsBuffer) => Right(lsBuffer.toList)
-      case Left(_)         => Left(ParseTokenError)
-    }
+    for {
+      ls <- parseInner(input, new ListBuffer[Token]())
+    } yield ls.toList
   }
 }
 

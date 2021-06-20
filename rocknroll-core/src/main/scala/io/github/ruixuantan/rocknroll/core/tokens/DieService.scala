@@ -4,17 +4,18 @@ import io.github.ruixuantan.rocknroll.core.generators.{
   DefaultGenerator,
   Generator,
 }
+import io.github.ruixuantan.rocknroll.core.results.Result
 import io.github.ruixuantan.rocknroll.core.tokens.Value.Die
 
-class DieService(generator: Generator) {
+class DieService(generator: Generator) extends ValueAlgebra[Die] {
   private def getExpected(die: Die): Double =
     ((die.sides + 1) / 2.toDouble) * die.freq
 
-  private def rollOnce(die: Die): Int =
+  private def roll(die: Die): Int =
     generator.nextInt(die.sides)
 
-  def roll(die: Die): Result = {
-    val res = (1 to die.freq).map(_ => rollOnce(die)).sum
+  def getResult(die: Die): Result = {
+    val res = (1 to die.freq).map(_ => roll(die)).sum
     Result(res, getExpected(die))
   }
 }
