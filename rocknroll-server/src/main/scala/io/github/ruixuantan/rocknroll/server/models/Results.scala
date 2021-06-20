@@ -1,4 +1,4 @@
-package io.github.ruixuantan.rocknroll.server.domain.stats
+package io.github.ruixuantan.rocknroll.server.models
 
 case class Results(
     id: Int = 0,

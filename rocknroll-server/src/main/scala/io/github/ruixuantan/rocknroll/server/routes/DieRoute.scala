@@ -1,14 +1,14 @@
-package io.github.ruixuantan.rocknroll.server.infrastructure.routes
+package io.github.ruixuantan.rocknroll.server.routes
 
 import cats.effect.Sync
 import cats.implicits._
 import io.circe.generic.codec.DerivedAsObjectCodec.deriveCodec
-import io.github.ruixuantan.rocknroll.server.domain.dice.{
-  DieService,
+import io.github.ruixuantan.rocknroll.server.dto.{
   InvalidResponse,
   ValidResponse,
   ValidateResponse,
 }
+import io.github.ruixuantan.rocknroll.server.services.DieService
 import org.http4s.HttpRoutes
 import org.http4s.circe.CirceEntityCodec.circeEntityEncoder
 import org.http4s.dsl.Http4sDsl
@@ -17,7 +17,7 @@ import org.http4s.server.middleware.CORS
 class DieRoute[F[_]: Sync] extends Http4sDsl[F] {
 
   private def validateEndPoint(dieService: DieService[F]): HttpRoutes[F] =
-    HttpRoutes.of { case req @ POST -> Root / "validate" =>
+    HttpRoutes.of { case req @ POST -> Root / RouteSuffixes.dieValidate =>
       for {
         msg <- req.as[String]
         res <- dieService

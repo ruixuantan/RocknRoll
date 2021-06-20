@@ -1,20 +1,27 @@
-package io.github.ruixuantan.rocknroll.server.domain.dice
+package io.github.ruixuantan.rocknroll.server.services
 
 import cats.Applicative
 import cats.implicits._
+import io.circe.generic.auto._
 import io.circe.syntax.EncoderOps
 import io.github.ruixuantan.rocknroll.core.CoreAlgebra
 import io.github.ruixuantan.rocknroll.core.parser.ParseError
 import io.github.ruixuantan.rocknroll.core.tokens.Token
-import io.github.ruixuantan.rocknroll.server.domain.stats.{DieCount, Results}
-import io.circe.generic.auto._
+import io.github.ruixuantan.rocknroll.server.dto.{
+  DieResponse,
+  InvalidResponse,
+  ValidResponse,
+  ValidateResponse,
+}
+import io.github.ruixuantan.rocknroll.server.models.{DieCount, Results}
+import io.github.ruixuantan.rocknroll.server.routes.{RoutePaths, RouteSuffixes}
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import scalaj.http.Http
+import scala.concurrent.Future
 
 class DieService[F[_]: Applicative](
     coreAlgebra: CoreAlgebra,
+    baseUrl: String,
 ) {
   def validate(input: String): F[DieResponse] = {
     val tokens = for {
@@ -45,20 +52,18 @@ class DieService[F[_]: Applicative](
         .toString
       for {
         b <- body
-      } yield Http("http://localhost:8080/api/v1/stats/diecount")
-        .header("content-type", "application/json")
-        .postData(b)
-        .asString
-        .code
+      } yield HttpService.post(
+        baseUrl + RoutePaths.StatsRoutePath.path + RouteSuffixes.statsDiecount,
+        b,
+      )
     }
 
   private def saveResult(input: String, results: String): Future[_] =
     Future {
-      Http("http://localhost:8080/api/v1/stats/results")
-        .header("content-type", "application/json")
-        .postData(Results(input = input, result = results).asJson.toString)
-        .asString
-        .code
+      HttpService.post(
+        baseUrl + RoutePaths.StatsRoutePath.path + RouteSuffixes.statsResult,
+        Results(input = input, result = results).asJson.toString,
+      )
     }
 
   def eval(input: String): F[DieResponse] = {
@@ -89,6 +94,7 @@ class DieService[F[_]: Applicative](
 object DieService {
   def apply[F[_]: Applicative](
       coreAlgebra: CoreAlgebra,
+      baseUrl: String,
   ) =
-    new DieService[F](coreAlgebra)
+    new DieService[F](coreAlgebra, baseUrl)
 }

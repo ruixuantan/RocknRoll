@@ -3,6 +3,6 @@ const baseUrl = devUrl + "/api/v1";
 
 export const PATHS = {
   dice: baseUrl + "/dice",
-  diceValidator: baseUrl + "/dice/validate/",
+  diceValidator: baseUrl + "/dice/validate",
   stats: baseUrl + "/stats/"
 };

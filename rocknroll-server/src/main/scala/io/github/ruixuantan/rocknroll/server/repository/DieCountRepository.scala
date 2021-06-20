@@ -1,12 +1,10 @@
-package io.github.ruixuantan.rocknroll.server.infrastructure.repository
+package io.github.ruixuantan.rocknroll.server.repository
 
 import cats.effect.Sync
 import doobie.implicits._
 import doobie.{LogHandler, Query0, Transactor, Update0}
-import io.github.ruixuantan.rocknroll.server.domain.stats.{
-  DieCount,
-  DieCountRepositoryAlgebra,
-}
+import io.github.ruixuantan.rocknroll.server.models.DieCount
+import io.github.ruixuantan.rocknroll.server.services.DieCountRepositoryAlgebra
 
 private object DieCountSQLService {
   implicit val handler = LogHandler.jdkLogHandler

@@ -15,16 +15,19 @@ import cats.effect.{
 import config.{DbConfig, DbMigrator, LogConfig, RocknRollConfig, ServerConfig}
 import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
-import infrastructure.routes.{DieRoute, RoutePaths, StatsRoute}
 import io.circe.config.parser
 import io.circe.generic.codec.DerivedAsObjectCodec.deriveCodec
 import io.github.ruixuantan.rocknroll.core.CoreService
-import io.github.ruixuantan.rocknroll.server.domain.dice.DieService
-import io.github.ruixuantan.rocknroll.server.domain.stats.StatsService
-import io.github.ruixuantan.rocknroll.server.infrastructure.repository.{
+import io.github.ruixuantan.rocknroll.server.repository.{
   DieCountRepository,
   ResultsRepository,
 }
+import io.github.ruixuantan.rocknroll.server.routes.{
+  DieRoute,
+  RoutePaths,
+  StatsRoute,
+}
+import io.github.ruixuantan.rocknroll.server.services.{DieService, StatsService}
 import org.http4s.HttpRoutes
 import org.http4s.server.{Router, Server => BlazeServer}
 import org.http4s.server.blaze.BlazeServerBuilder
@@ -86,8 +89,10 @@ object Server extends IOApp {
       coreService        = CoreService
       dieCountRepository = DieCountRepository[F](xa)
       resultsRepository  = ResultsRepository[F](xa)
+      baseUrl            = conf.server.baseUrl
       dieService = DieService[F](
         coreService,
+        baseUrl,
       )
       statsService = StatsService[F](
         dieCountRepository,

@@ -1,4 +1,4 @@
-package io.github.ruixuantan.rocknroll.server.domain.dice
+package io.github.ruixuantan.rocknroll.server.dto
 
 sealed trait DieResponse
 case class ValidResponse(

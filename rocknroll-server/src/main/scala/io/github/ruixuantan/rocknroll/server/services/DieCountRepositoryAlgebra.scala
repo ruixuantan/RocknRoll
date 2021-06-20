@@ -1,4 +1,6 @@
-package io.github.ruixuantan.rocknroll.server.domain.stats
+package io.github.ruixuantan.rocknroll.server.services
+
+import io.github.ruixuantan.rocknroll.server.models.DieCount
 
 trait DieCountRepositoryAlgebra[F[_]] {
   def upsert(die: DieCount): F[DieCount]

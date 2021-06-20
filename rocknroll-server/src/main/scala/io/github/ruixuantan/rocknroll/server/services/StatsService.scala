@@ -1,7 +1,8 @@
-package io.github.ruixuantan.rocknroll.server.domain.stats
+package io.github.ruixuantan.rocknroll.server.services
 
 import cats.Applicative
 import cats.implicits.toTraverseOps
+import io.github.ruixuantan.rocknroll.server.models.{DieCount, Results}
 
 class StatsService[F[_]: Applicative](
     dieCountRepository: DieCountRepositoryAlgebra[F],

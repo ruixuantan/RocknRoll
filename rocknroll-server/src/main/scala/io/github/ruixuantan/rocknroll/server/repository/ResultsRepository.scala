@@ -1,12 +1,10 @@
-package io.github.ruixuantan.rocknroll.server.infrastructure.repository
+package io.github.ruixuantan.rocknroll.server.repository
 
 import cats.effect.Sync
 import doobie.{LogHandler, Query0, Transactor, Update0}
 import doobie.implicits._
-import io.github.ruixuantan.rocknroll.server.domain.stats.{
-  Results,
-  ResultsRepositoryAlgebra,
-}
+import io.github.ruixuantan.rocknroll.server.models.Results
+import io.github.ruixuantan.rocknroll.server.services.ResultsRepositoryAlgebra
 
 private object ResultsSQLService {
   def insert(results: Results): Update0 =
