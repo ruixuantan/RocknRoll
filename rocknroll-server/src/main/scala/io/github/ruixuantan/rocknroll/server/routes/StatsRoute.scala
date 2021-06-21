@@ -40,7 +40,6 @@ class StatsRoute[F[_]: Sync] extends Http4sDsl[F] {
       statsService: StatsService[F],
   ): HttpRoutes[F] =
     HttpRoutes.of { case req @ POST -> Root / RouteSuffixes.statsResult =>
-      println("X" + req)
       for {
         res     <- req.as[Results]
         results <- Ok(statsService.createResults(res))

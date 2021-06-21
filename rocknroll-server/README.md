@@ -35,7 +35,7 @@
 ### Validate die string
 | Method | URL | URL Params |
 | ------ | --- | ---------- |
-| `POST` | /api/v1/dice/validate | None ||
+| `POST` | /api/v1/dice/validate | None |
 
 * Data Params
     * body: text/plain
@@ -54,5 +54,48 @@
     }
     ```
 
-* Error Response:
-    * Code: 500
+### Upsert Die Count 
+| Method | URL | URL Params |
+| ------ | --- | ---------- |
+| `POST` | /api/v1/stats/diecount | None |
+
+* Data Params
+  * body: json 
+
+* Sample Call
+    ```json
+    [ 
+      {
+        "sides": 12,
+        "freq": 10 
+      },
+      {
+        "sides": 6,
+        "freq": 4
+      } 
+    ]
+    ```
+
+* Success Response:
+  * Code: 200
+
+### Create Result 
+| Method | URL | URL Params |
+| ------ | --- | ---------- |
+| `POST` | /api/v1/stats/results | None |
+
+* Data Params
+  * body: json
+
+* Sample Call
+    ```json
+    {
+      "id": 0,
+      "input": "d20 / d20",
+      "result": "10 / 13",
+      "createdAt": ""
+    }
+    ```
+
+* Success Response:
+  * Code: 200

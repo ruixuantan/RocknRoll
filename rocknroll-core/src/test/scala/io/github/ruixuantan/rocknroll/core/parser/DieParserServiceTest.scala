@@ -73,7 +73,6 @@ class DieParserServiceTest extends AnyFunSuite {
   test("DieParserService eval d20") {
     assert(dieParserService.eval(List(Die(20, 1))) match {
       case Right(results) =>
-        println(results)
         results.map(_.expected) == List(10.5)
       case Left(_) => false
     })
