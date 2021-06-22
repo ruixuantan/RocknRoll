@@ -2,12 +2,12 @@ package io.github.ruixuantan.rocknroll.server.repository
 
 import cats.effect.Sync
 import doobie.implicits._
-import doobie.{LogHandler, Query0, Transactor, Update0}
+import doobie.{Query0, Transactor, Update0}
 import io.github.ruixuantan.rocknroll.server.models.DieCount
 import io.github.ruixuantan.rocknroll.server.services.DieCountRepositoryAlgebra
 
 private object DieCountSQLService {
-  implicit val handler = LogHandler.jdkLogHandler
+  implicit val handler = DoobieLogger.logger
 
   def upsertDie(die: DieCount): Update0 =
     sql"""INSERT INTO die_count (die_side, frequency) VALUES (${die.sides}, ${die.freq}) 
@@ -18,15 +18,12 @@ private object DieCountSQLService {
     sql"""SELECT * FROM die_count WHERE die_side=$dieSides""".query
 
   def selectAll: Query0[DieCount] =
-    sql"""SELECT * FROM die_count ORDER BY die_side""".queryWithLogHandler(
-      LogHandler.jdkLogHandler,
-    )
+    sql"""SELECT * FROM die_count ORDER BY die_side""".query
 }
 
 class DieCountRepository[F[_]: Sync](val xa: Transactor[F])
     extends DieCountRepositoryAlgebra[F] {
   import DieCountSQLService._
-  implicit val handler = LogHandler.jdkLogHandler
 
   override def upsert(die: DieCount): F[DieCount] =
     upsertDie(die).run.map(_ => die).transact(xa)
