@@ -4,6 +4,7 @@ sealed trait DieResponse
 case class ValidResponse(
     results: String,
     expected: String,
+    standardDeviation: String,
 ) extends DieResponse
 case class InvalidResponse(
     msg: String,

@@ -79,8 +79,9 @@ class DieService[F[_]: Applicative](
     val response: DieResponse = results match {
       case Right(res) =>
         val validResponse = ValidResponse(
-          res.map(_.res).mkString(" / "),
+          res.map(_.result).mkString(" / "),
           res.map(_.expected).mkString(" / "),
+          res.map(_.standardDeviation).mkString(" / "),
         )
         saveDieCount(tokens)
         saveResult(input, validResponse.results)

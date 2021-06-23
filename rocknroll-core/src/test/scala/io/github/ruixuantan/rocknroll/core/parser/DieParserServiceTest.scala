@@ -73,15 +73,18 @@ class DieParserServiceTest extends AnyFunSuite {
   test("DieParserService eval d20") {
     assert(dieParserService.eval(List(Die(20, 1))) match {
       case Right(results) =>
-        results.map(_.expected) == List(10.5)
+        (results.map(_.expected) == List(10.5)) &
+          (results.map(_.standardDeviation) == List(5.766))
       case Left(_) => false
     })
   }
 
   test("DieParserService eval 12") {
     assert(dieParserService.eval(List(Number(12))) match {
-      case Right(results) => results.map(_.expected) == List(12)
-      case Left(_)        => false
+      case Right(results) =>
+        (results.map(_.expected) == List(12)) &
+          (results.map(_.standardDeviation) == List(0))
+      case Left(_) => false
     })
   }
 
@@ -90,8 +93,10 @@ class DieParserServiceTest extends AnyFunSuite {
       dieParserService.eval(
         List(Die(20, 1), Add, Number(20), Subtract, Die(6, 2)),
       ) match {
-        case Right(results) => results.map(_.expected) == List(23.5)
-        case Left(_)        => false
+        case Right(results) =>
+          (results.map(_.expected) == List(23.5)) &
+            (results.map(_.standardDeviation) == List(6.252))
+        case Left(_) => false
       },
     )
   }
@@ -101,8 +106,10 @@ class DieParserServiceTest extends AnyFunSuite {
       dieParserService.eval(
         List(Number(1), Subtract, Die(20, 1)),
       ) match {
-        case Right(results) => results.map(_.expected) == List(-9.5)
-        case Left(_)        => false
+        case Right(results) =>
+          (results.map(_.expected) == List(-9.5)) &
+            (results.map(_.standardDeviation) == List(5.766))
+        case Left(_) => false
       },
     )
   }
@@ -112,8 +119,10 @@ class DieParserServiceTest extends AnyFunSuite {
       dieParserService.eval(
         List(Die(20, 1), Separate, Die(6, 3), Add, Number(8)),
       ) match {
-        case Right(results) => results.map(_.expected) == List(10.5, 18.5)
-        case Left(_)        => false
+        case Right(results) =>
+          (results.map(_.expected) == List(10.5, 18.5)) &
+            (results.map(_.standardDeviation) == List(5.766, 2.958))
+        case Left(_) => false
       },
     )
   }

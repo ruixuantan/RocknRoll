@@ -11,13 +11,13 @@ import { DiceService } from '../../services/dice.service';
 export class DiceComponent {
 
   dieResults: DieRow[] = [...DieTemplate];
-  displayedColumns: string[] = ['input', 'output', 'expected'];
+  displayedColumns: string[] = ['input', 'output', 'expected', 'standardDeviation'];
   dieCommandInput = '';
 
   constructor(private diceService: DiceService, private customService: CustomService) { }
 
-  updateDieResults(input: string, output: string, expected: string) {
-    this.dieResults.unshift({input: input, output: output, expected: expected});
+  updateDieResults(input: string, output: string, expected: string, standardDeviation: string) {
+    this.dieResults.unshift({input: input, output: output, expected: expected, standardDeviation: standardDeviation});
     this.dieResults.pop();
     this.dieResults = [...this.dieResults];
   }
@@ -33,8 +33,8 @@ export class DiceComponent {
     } catch (err) { }
     this.diceService.parseDieInput(input)
       .subscribe(
-        res => this.updateDieResults(displayInput, res.results, res.expected),
-        err => this.updateDieResults(displayInput, err.error, '')
+        res => this.updateDieResults(displayInput, res.results, res.expected, res.standardDeviation),
+        err => this.updateDieResults(displayInput, err.error, '', '')
       );
     this.dieCommandInput = '';
   }
