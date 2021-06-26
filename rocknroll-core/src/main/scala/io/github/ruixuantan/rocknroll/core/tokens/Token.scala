@@ -4,8 +4,8 @@ trait Token
 
 trait Value extends Token
 object Value {
-  case class Die(sides: Int, freq: Int) extends Value
-  case class Number(number: Int)        extends Value
+  case class Die(sides: Int, frequency: Int) extends Value
+  case class Number(number: Int)             extends Value
 }
 
 trait Operator extends Token

@@ -47,7 +47,7 @@ class DieService[F[_]: Applicative](
         t <- tokens
       } yield coreAlgebra
         .getDice(t)
-        .map(die => DieCount(die.sides, die.freq))
+        .map(die => DieCount(die.sides, die.frequency))
         .asJson
         .toString
       for {
@@ -79,11 +79,13 @@ class DieService[F[_]: Applicative](
     val response: DieResponse = results match {
       case Right(res) =>
         val validResponse = ValidResponse(
-          res.map(_.res).mkString(" / "),
+          res.map(_.result).mkString(" / "),
           res.map(_.expected).mkString(" / "),
+          res.map(_.standardDeviation).mkString(" / "),
+          res.toArray,
         )
         saveDieCount(tokens)
-        saveResult(input, validResponse.results)
+        saveResult(input, validResponse.resultString)
         validResponse
       case Left(err) => InvalidResponse(err.msg)
     }

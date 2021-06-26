@@ -8,9 +8,11 @@ import io.github.ruixuantan.rocknroll.core.tokens.Operator.{
   Separate,
   Subtract,
 }
+import io.github.ruixuantan.rocknroll.core.utils.MathUtil
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
+import scala.math.sqrt
 
 class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
     extends DieParserAlgebra {
@@ -53,22 +55,34 @@ class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
 
   private def evalExpression(
       expr: Expression,
-      handleVal: ExpressionValue => Either[ParseOrderError.type, Result],
-      handleEval: ExpressionEval => Either[ParseOrderError.type, Result],
-  ): Either[ParseOrderError.type, Result] =
+      handleVal: ExpressionValue => Either[ParseOrderError.type, FinalResult],
+      handleEval: ExpressionEval => Either[ParseOrderError.type, FinalResult],
+  ): Either[ParseOrderError.type, FinalResult] =
     expr match {
       case exprValue: ExpressionValue => handleVal(exprValue)
       case exprEval: ExpressionEval   => handleEval(exprEval)
     }
 
+  private def getFinalResult(tokens: List[Token], result: Result): FinalResult =
+    FinalResult(
+      tokenParser.prettyPrintTokens(tokens),
+      result.result,
+      result.expected,
+      MathUtil.round(sqrt(result.variance), 3),
+      result.lowerBound,
+      result.upperBound,
+      result.diceRolled,
+    )
+
   private def evalHelper(
+      originalTokens: List[Token],
       tokens: List[Token],
       acc: Expression,
-  ): Either[ParseOrderError.type, Result] =
+  ): Either[ParseOrderError.type, FinalResult] =
     if (tokens.isEmpty) {
       evalExpression(
         acc,
-        exprValue => Right(exprValue.res),
+        exprValue => Right(getFinalResult(originalTokens, exprValue.res)),
         _ => Left(ParseOrderError),
       )
     } else {
@@ -78,21 +92,31 @@ class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
             acc,
             _ => Left(ParseOrderError),
             exprEval =>
-              evalHelper(tokens.tail, getExpressionValue(value, exprEval)),
+              evalHelper(
+                originalTokens,
+                tokens.tail,
+                getExpressionValue(value, exprEval),
+              ),
           )
         case op: Operator =>
           evalExpression(
             acc,
             exprValue =>
-              evalHelper(tokens.tail, getExpressionEval(op, exprValue)),
+              evalHelper(
+                originalTokens,
+                tokens.tail,
+                getExpressionEval(op, exprValue),
+              ),
             _ => Left(ParseOrderError),
           )
       }
     }
 
-  override def eval(tokens: List[Token]): Either[ParseError, List[Result]] = {
+  override def eval(
+      tokens: List[Token],
+  ): Either[ParseError, List[FinalResult]] = {
     @tailrec
-    def evalInner(
+    def evalSeparate(
         tokens: List[Token],
         tokenBuffer: ListBuffer[Token],
         lsBuffer: ListBuffer[List[Token]],
@@ -100,17 +124,17 @@ class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
       if (tokens.isEmpty)
         lsBuffer.addOne(tokenBuffer.toList).toList
       else if (tokens.head == Separate)
-        evalInner(
+        evalSeparate(
           tokens.tail,
           new ListBuffer[Token](),
           lsBuffer.addOne(tokenBuffer.toList),
         )
       else
-        evalInner(tokens.tail, tokenBuffer.addOne(tokens.head), lsBuffer)
+        evalSeparate(tokens.tail, tokenBuffer.addOne(tokens.head), lsBuffer)
 
     val initial = ExpressionEval(resultAlgebra.add(resultAlgebra.identity))
-    evalInner(tokens, new ListBuffer[Token](), new ListBuffer[List[Token]]())
-      .map(tokenList => evalHelper(tokenList, initial))
+    evalSeparate(tokens, new ListBuffer[Token](), new ListBuffer[List[Token]]())
+      .map(tokenList => evalHelper(tokenList, tokenList, initial))
       .sequence
   }
 }

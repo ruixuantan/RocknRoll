@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { DieTemplate, DieRow } from 'src/app/models/Dice';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { DieTemplate, DieRow, DieSingleResult } from 'src/app/models/Dice';
 import { CustomService } from 'src/app/services/custom.service';
 import { DiceService } from '../../services/dice.service';
+import { DieGraphDialogComponent } from './die-graph-dialog/die-graph-dialog.component';
 
 @Component({
   selector: 'app-dice',
@@ -11,13 +13,13 @@ import { DiceService } from '../../services/dice.service';
 export class DiceComponent {
 
   dieResults: DieRow[] = [...DieTemplate];
-  displayedColumns: string[] = ['input', 'output', 'expected'];
+  displayedColumns: string[] = ['input', 'output', 'expected', 'standardDeviation'];
   dieCommandInput = '';
 
-  constructor(private diceService: DiceService, private customService: CustomService) { }
+  constructor(private diceService: DiceService, private customService: CustomService, private readonly dieGraphDialog: MatDialog) { }
 
-  updateDieResults(input: string, output: string, expected: string) {
-    this.dieResults.unshift({input: input, output: output, expected: expected});
+  updateDieResults(input: string, output: string, expected: string, standardDeviation: string, result: DieSingleResult[]) {
+    this.dieResults.unshift({input: input, output: output, expected: expected, standardDeviation: standardDeviation, result: result});
     this.dieResults.pop();
     this.dieResults = [...this.dieResults];
   }
@@ -33,13 +35,21 @@ export class DiceComponent {
     } catch (err) { }
     this.diceService.parseDieInput(input)
       .subscribe(
-        res => this.updateDieResults(displayInput, res.results, res.expected),
-        err => this.updateDieResults(displayInput, err.error, '')
+        res => this.updateDieResults(displayInput, res.resultString, res.expected, res.standardDeviation, res.results),
+        err => this.updateDieResults(displayInput, err.error, '', '', [])
       );
     this.dieCommandInput = '';
   }
 
   clearTable() {
     this.dieResults = [...DieTemplate];
+  }
+
+  onClickDieRow(dieRow: DieRow) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = dieRow;
+    if (dieRow.input !== '') {
+      this.dieGraphDialog.open(DieGraphDialogComponent, dialogConfig);
+    }
   }
 }

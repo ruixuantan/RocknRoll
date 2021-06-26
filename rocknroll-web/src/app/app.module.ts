@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { FormsModule } from '@angular/forms';
+import { HighchartsChartModule } from 'highcharts-angular';
 
 import { DiceComponent } from './components/dice/dice.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -15,6 +16,8 @@ import { CustomDashboardComponent } from './components/custom/custom-dashboard/c
 import { CustomFormComponent } from './components/custom/custom-form/custom-form.component';
 import { DeleteAlertDialogComponent } from './components/shared/delete-alert-dialog/delete-alert-dialog.component';
 import { StatsComponent } from './components/stats/stats.component';
+import { DieGraphDialogComponent } from './components/dice/die-graph-dialog/die-graph-dialog.component';
+import { DieGraphDisplayComponent } from './components/dice/die-graph-display/die-graph-display.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,9 @@ import { StatsComponent } from './components/stats/stats.component';
     CustomDashboardComponent,
     CustomFormComponent,
     DeleteAlertDialogComponent,
-    StatsComponent
+    StatsComponent,
+    DieGraphDialogComponent,
+    DieGraphDisplayComponent
   ],
   imports: [
     BrowserModule,
@@ -33,7 +38,8 @@ import { StatsComponent } from './components/stats/stats.component';
     NoopAnimationsModule,
     HttpClientModule,
     MaterialModule,
-    FormsModule
+    FormsModule,
+    HighchartsChartModule
   ],
   providers: [],
   bootstrap: [AppComponent]

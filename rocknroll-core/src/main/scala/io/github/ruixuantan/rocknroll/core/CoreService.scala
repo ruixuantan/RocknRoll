@@ -3,11 +3,11 @@ package io.github.ruixuantan.rocknroll.core
 import io.github.ruixuantan.rocknroll.core.parser.{
   DieParserAlgebra,
   DieParserService,
+  FinalResult,
   ParseError,
   TokenParser,
 }
 import io.github.ruixuantan.rocknroll.core.results.{
-  Result,
   ResultAlgebra,
   ResultService,
 }
@@ -34,14 +34,15 @@ object CoreService extends CoreAlgebra {
   override def validate(tokens: List[Token]): Boolean =
     dieParserService.validate(tokens)
 
-  override def eval(tokens: List[Token]): Either[ParseError, List[Result]] =
+  override def eval(
+      tokens: List[Token],
+  ): Either[ParseError, List[FinalResult]] =
     dieParserService.eval(tokens)
 
   override def prettyPrint(
       tokens: List[Token],
-      delimiter: String,
   ): String =
-    tokens.map(token => tokenParser.prettyPrintToken(token)).mkString(delimiter)
+    tokenParser.prettyPrintTokens(tokens)
 
   override def getDice(tokens: List[Token]): List[Die] =
     tokens.filter(_.isInstanceOf[Die]).map(_.asInstanceOf[Die])
