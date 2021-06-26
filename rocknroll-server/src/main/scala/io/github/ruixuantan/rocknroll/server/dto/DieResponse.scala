@@ -1,10 +1,13 @@
 package io.github.ruixuantan.rocknroll.server.dto
 
+import io.github.ruixuantan.rocknroll.core.parser.FinalResult
+
 sealed trait DieResponse
 case class ValidResponse(
-    results: String,
+    resultString: String,
     expected: String,
     standardDeviation: String,
+    results: Array[FinalResult],
 ) extends DieResponse
 case class InvalidResponse(
     msg: String,

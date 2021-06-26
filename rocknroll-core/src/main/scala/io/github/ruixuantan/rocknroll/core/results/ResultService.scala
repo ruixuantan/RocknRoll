@@ -7,7 +7,7 @@ class ResultService(
     dieAlgebra: ValueAlgebra[Die],
     numberAlgebra: ValueAlgebra[Number],
 ) extends ResultAlgebra {
-  override def identity: Result = Result(0, 0, 0)
+  override def identity: Result = Result(0, 0, 0, 0, 0, 0)
 
   override def getResult(x: Value): Result =
     x match {
@@ -20,6 +20,9 @@ class ResultService(
       x.result + y.result,
       x.expected + y.expected,
       x.variance + y.variance,
+      x.lowerBound + y.lowerBound,
+      x.upperBound + y.upperBound,
+      x.diceRolled + y.diceRolled,
     )
 
   override def subtract(x: Result)(y: Result): Result =
@@ -27,6 +30,9 @@ class ResultService(
       x.result - y.result,
       x.expected - y.expected,
       x.variance + y.variance,
+      x.lowerBound - y.upperBound,
+      x.upperBound - y.lowerBound,
+      x.diceRolled + y.diceRolled,
     )
 }
 

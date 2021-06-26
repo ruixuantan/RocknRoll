@@ -1,7 +1,18 @@
 export interface DieResult {
-  results: string,
+  resultString: string,
   expected: string,
-  standardDeviation: string
+  standardDeviation: string,
+  results: DieSingleResult[],
+}
+
+export interface DieSingleResult {
+  input: string,
+  result: number,
+  expected: number,
+  standardDeviation: number,
+  lowerBound: number,
+  upperBound: number,
+  diceRolled: number
 }
 
 export interface DieValidator {
@@ -14,6 +25,7 @@ export interface DieRow {
   output: string,
   expected: string,
   standardDeviation: string
+  result: DieSingleResult[]
 }
 
 const emptyDieResult = {input: '', output: '', expected: '', standardDeviation: ''};

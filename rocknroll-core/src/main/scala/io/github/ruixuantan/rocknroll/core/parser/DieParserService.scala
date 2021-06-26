@@ -63,21 +63,26 @@ class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
       case exprEval: ExpressionEval   => handleEval(exprEval)
     }
 
-  private def getFinalResult(result: Result): FinalResult =
+  private def getFinalResult(tokens: List[Token], result: Result): FinalResult =
     FinalResult(
+      tokenParser.prettyPrintTokens(tokens),
       result.result,
       result.expected,
       MathUtil.round(sqrt(result.variance), 3),
+      result.lowerBound,
+      result.upperBound,
+      result.diceRolled,
     )
 
   private def evalHelper(
+      originalTokens: List[Token],
       tokens: List[Token],
       acc: Expression,
   ): Either[ParseOrderError.type, FinalResult] =
     if (tokens.isEmpty) {
       evalExpression(
         acc,
-        exprValue => Right(getFinalResult(exprValue.res)),
+        exprValue => Right(getFinalResult(originalTokens, exprValue.res)),
         _ => Left(ParseOrderError),
       )
     } else {
@@ -87,13 +92,21 @@ class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
             acc,
             _ => Left(ParseOrderError),
             exprEval =>
-              evalHelper(tokens.tail, getExpressionValue(value, exprEval)),
+              evalHelper(
+                originalTokens,
+                tokens.tail,
+                getExpressionValue(value, exprEval),
+              ),
           )
         case op: Operator =>
           evalExpression(
             acc,
             exprValue =>
-              evalHelper(tokens.tail, getExpressionEval(op, exprValue)),
+              evalHelper(
+                originalTokens,
+                tokens.tail,
+                getExpressionEval(op, exprValue),
+              ),
             _ => Left(ParseOrderError),
           )
       }
@@ -121,7 +134,7 @@ class DieParserService(tokenParser: TokenParser, resultAlgebra: ResultAlgebra)
 
     val initial = ExpressionEval(resultAlgebra.add(resultAlgebra.identity))
     evalSeparate(tokens, new ListBuffer[Token](), new ListBuffer[List[Token]]())
-      .map(tokenList => evalHelper(tokenList, initial))
+      .map(tokenList => evalHelper(tokenList, tokenList, initial))
       .sequence
   }
 }

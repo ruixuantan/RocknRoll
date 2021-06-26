@@ -8,7 +8,6 @@ import io.github.ruixuantan.rocknroll.core.parser.{
   TokenParser,
 }
 import io.github.ruixuantan.rocknroll.core.results.{
-  Result,
   ResultAlgebra,
   ResultService,
 }
@@ -42,9 +41,8 @@ object CoreService extends CoreAlgebra {
 
   override def prettyPrint(
       tokens: List[Token],
-      delimiter: String,
   ): String =
-    tokens.map(token => tokenParser.prettyPrintToken(token)).mkString(delimiter)
+    tokenParser.prettyPrintTokens(tokens)
 
   override def getDice(tokens: List[Token]): List[Die] =
     tokens.filter(_.isInstanceOf[Die]).map(_.asInstanceOf[Die])

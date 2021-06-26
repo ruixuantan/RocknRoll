@@ -71,10 +71,15 @@ class DieParserServiceTest extends AnyFunSuite {
   }
 
   test("DieParserService eval d20") {
+
     assert(dieParserService.eval(List(Die(20, 1))) match {
       case Right(results) =>
-        (results.map(_.expected) == List(10.5)) &
-          (results.map(_.standardDeviation) == List(5.766))
+        (results.map(_.input) == List("d20")) &
+          (results.map(_.expected) == List(10.5)) &
+          (results.map(_.standardDeviation) == List(5.766)) &
+          (results.map(_.lowerBound) == List(1)) &
+          (results.map(_.upperBound) == List(20)) &
+          (results.map(_.diceRolled) == List(1))
       case Left(_) => false
     })
   }
@@ -82,8 +87,12 @@ class DieParserServiceTest extends AnyFunSuite {
   test("DieParserService eval 12") {
     assert(dieParserService.eval(List(Number(12))) match {
       case Right(results) =>
-        (results.map(_.expected) == List(12)) &
-          (results.map(_.standardDeviation) == List(0))
+        (results.map(_.input) == List("12")) &
+          (results.map(_.expected) == List(12)) &
+          (results.map(_.standardDeviation) == List(0)) &
+          (results.map(_.lowerBound) == List(12)) &
+          (results.map(_.upperBound) == List(12)) &
+          (results.map(_.diceRolled) == List(0))
       case Left(_) => false
     })
   }
@@ -94,8 +103,12 @@ class DieParserServiceTest extends AnyFunSuite {
         List(Die(20, 1), Add, Number(20), Subtract, Die(6, 2)),
       ) match {
         case Right(results) =>
-          (results.map(_.expected) == List(23.5)) &
-            (results.map(_.standardDeviation) == List(6.252))
+          (results.map(_.input) == List("d20 + 20 - 2d6")) &
+            (results.map(_.expected) == List(23.5)) &
+            (results.map(_.standardDeviation) == List(6.252)) &
+            (results.map(_.lowerBound) == List(9)) &
+            (results.map(_.upperBound) == List(38)) &
+            (results.map(_.diceRolled) == List(3))
         case Left(_) => false
       },
     )
@@ -107,8 +120,12 @@ class DieParserServiceTest extends AnyFunSuite {
         List(Number(1), Subtract, Die(20, 1)),
       ) match {
         case Right(results) =>
-          (results.map(_.expected) == List(-9.5)) &
-            (results.map(_.standardDeviation) == List(5.766))
+          (results.map(_.input) == List("1 - d20")) &
+            (results.map(_.expected) == List(-9.5)) &
+            (results.map(_.standardDeviation) == List(5.766)) &
+            (results.map(_.lowerBound) == List(-19)) &
+            (results.map(_.upperBound) == List(0)) &
+            (results.map(_.diceRolled) == List(1))
         case Left(_) => false
       },
     )
@@ -120,8 +137,12 @@ class DieParserServiceTest extends AnyFunSuite {
         List(Die(20, 1), Separate, Die(6, 3), Add, Number(8)),
       ) match {
         case Right(results) =>
-          (results.map(_.expected) == List(10.5, 18.5)) &
-            (results.map(_.standardDeviation) == List(5.766, 2.958))
+          (results.map(_.input) == List("d20", "3d6 + 8")) &
+            (results.map(_.expected) == List(10.5, 18.5)) &
+            (results.map(_.standardDeviation) == List(5.766, 2.958)) &
+            (results.map(_.lowerBound) == List(1, 11)) &
+            (results.map(_.upperBound) == List(20, 26)) &
+            (results.map(_.diceRolled) == List(1, 3))
         case Left(_) => false
       },
     )

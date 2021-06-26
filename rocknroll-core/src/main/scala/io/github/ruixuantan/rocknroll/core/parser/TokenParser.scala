@@ -31,12 +31,16 @@ class TokenParser {
   def prettyPrintToken(input: Token): String =
     input match {
       case die: Die =>
-        if (die.freq == 1) s"d${die.sides}" else s"${die.freq}d${die.sides}"
+        if (die.frequency == 1) s"d${die.sides}"
+        else s"${die.frequency}d${die.sides}"
       case number: Number => number.number.toString
       case Add            => "+"
       case Subtract       => "-"
       case Separate       => "/"
     }
+
+  def prettyPrintTokens(input: List[Token]): String =
+    input.map(prettyPrintToken).mkString(" ")
 
   def tokenizeValue(token: String): Either[ParseError, Token] =
     token match {

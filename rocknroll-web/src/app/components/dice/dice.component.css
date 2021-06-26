@@ -25,3 +25,8 @@
   width: 90%;
   overflow: hidden;
 }
+
+.die-io .mat-row:hover .mat-cell {
+  cursor: pointer;
+  background-color: #E8EAF6;
+}

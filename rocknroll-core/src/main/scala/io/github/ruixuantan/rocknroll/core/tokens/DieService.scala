@@ -10,19 +10,26 @@ import io.github.ruixuantan.rocknroll.core.utils.MathUtil
 
 class DieService(generator: Generator) extends ValueAlgebra[Die] {
   private def getVariance(die: Die): Double = {
-    val variance = (((die.sides * die.sides) - 1) / 12.toDouble) * die.freq
+    val variance = (((die.sides * die.sides) - 1) / 12.toDouble) * die.frequency
     MathUtil.round(variance, 4)
   }
 
   private def getExpected(die: Die): Double =
-    ((die.sides + 1) / 2.toDouble) * die.freq
+    ((die.sides + 1) / 2.toDouble) * die.frequency
 
   private def roll(die: Die): Int =
     generator.nextInt(die.sides)
 
   def getResult(die: Die): Result = {
-    val res = (1 to die.freq).map(_ => roll(die)).sum
-    Result(res, getExpected(die), getVariance(die))
+    val res = (1 to die.frequency).map(_ => roll(die)).sum
+    Result(
+      res,
+      getExpected(die),
+      getVariance(die),
+      die.frequency,
+      die.sides * die.frequency,
+      die.frequency,
+    )
   }
 }
 

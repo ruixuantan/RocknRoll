@@ -10,33 +10,29 @@ class ResultServiceTest extends AnyFunSuite {
   private val resultService = ResultService(dieService, numberService)
 
   test("ResultService getResult of d15") {
-    val die = Die(15, 1)
-    assert(resultService.getResult(die).expected == 8)
-    assert(resultService.getResult(die).variance == 18.6667)
+    val res = resultService.getResult(Die(15, 1))
+    assert(res == Result(res.result, 8, 18.6667, 1, 15, 1))
   }
 
   test("ResultService getResult of 17d21") {
-    val die = Die(21, 17)
-    assert(resultService.getResult(die).expected == 187)
-    assert(resultService.getResult(die).variance == 623.3333)
+    val res = resultService.getResult(Die(21, 17))
+    assert(res == Result(res.result, 187, 623.3333, 17, 357, 17))
   }
 
   test("ResultService getResult of 21") {
-    val number = Number(21)
-    assert(resultService.getResult(number).result == 21)
-    assert(resultService.getResult(number).expected == 21)
-    assert(resultService.getResult(number).variance == 0)
+    val res = resultService.getResult(Number(21))
+    assert(res == Result(21, 21, 0, 21, 21, 0))
   }
 
   test("ResultService add result") {
-    val x = Result(21, 17, 3.6)
-    val y = Result(34, 2.5, 6)
-    assert(resultService.add(x)(y) == Result(55, 19.5, 9.6))
+    val x = Result(21, 17, 3.6, 2, 3, 1)
+    val y = Result(34, 2.5, 6, 3, 4, 5)
+    assert(resultService.add(x)(y) == Result(55, 19.5, 9.6, 5, 7, 6))
   }
 
   test("ResultService subtract result") {
-    val x = Result(21, 17, 3.6)
-    val y = Result(34, 2.5, 6)
-    assert(resultService.subtract(x)(y) == Result(-13, 14.5, 9.6))
+    val x = Result(21, 17, 3.6, 2, 3, 6)
+    val y = Result(34, 2.5, 6, 3, 4, 2)
+    assert(resultService.subtract(x)(y) == Result(-13, 14.5, 9.6, -2, 0, 8))
   }
 }
