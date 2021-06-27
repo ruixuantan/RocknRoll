@@ -3,6 +3,7 @@ package io.github.ruixuantan.rocknroll.server.repository
 import cats.effect.Sync
 import doobie.implicits._
 import doobie.{Query0, Transactor, Update0}
+import io.github.ruixuantan.rocknroll.server.dto.DieCountSum
 import io.github.ruixuantan.rocknroll.server.models.DieCount
 import io.github.ruixuantan.rocknroll.server.services.DieCountRepositoryAlgebra
 
@@ -10,8 +11,8 @@ private object DieCountSQLService {
   implicit val handler = DoobieLogger.logger
 
   def upsertDie(die: DieCount): Update0 =
-    sql"""INSERT INTO die_count (die_side, frequency) VALUES (${die.sides}, ${die.freq}) 
-        ON CONFLICT (die_side) DO UPDATE SET frequency = die_count.frequency + ${die.freq}
+    sql"""INSERT INTO die_count (die_side, frequency) VALUES (${die.sides}, ${die.frequency}) 
+        ON CONFLICT (die_side) DO UPDATE SET frequency = die_count.frequency + ${die.frequency}
        """.update
 
   def selectByDieSides(dieSides: Int): Query0[DieCount] =
@@ -19,6 +20,12 @@ private object DieCountSQLService {
 
   def selectAll: Query0[DieCount] =
     sql"""SELECT * FROM die_count ORDER BY die_side""".query
+
+  def selectTop(count: Int): Query0[DieCount] =
+    sql"""SELECT * FROM die_count ORDER BY frequency DESC LIMIT $count""".query
+
+  def selectDieCountSum: Query0[Int] =
+    sql"""SELECT SUM(frequency) FROM die_count""".query
 }
 
 class DieCountRepository[F[_]: Sync](val xa: Transactor[F])
@@ -33,6 +40,12 @@ class DieCountRepository[F[_]: Sync](val xa: Transactor[F])
 
   override def list(): F[Array[DieCount]] =
     selectAll.to[Array].transact(xa)
+
+  override def listTop(count: Int): F[Array[DieCount]] =
+    selectTop(count).to[Array].transact(xa)
+
+  override def getDieCountSum(): F[Option[Int]] =
+    selectDieCountSum.option.transact(xa)
 }
 
 object DieCountRepository {

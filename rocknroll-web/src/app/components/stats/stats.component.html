@@ -1,0 +1,11 @@
+<div class="stats-display">
+  <mat-card class="diecount-total-card">
+    <mat-card-title>
+      Total Dice Rolled: <br><br><br> {{totalDieCount.total}}
+    </mat-card-title>
+  </mat-card>
+  <div class="stats-chart-container">
+    <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions" [(update)]="updateFlag"
+      style="width: 800px; height: 1000px; display: block;"></highcharts-chart>
+  </div>
+</div>

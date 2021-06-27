@@ -4,5 +4,6 @@ const baseUrl = devUrl + "/api/v1";
 export const PATHS = {
   dice: baseUrl + "/dice",
   diceValidator: baseUrl + "/dice/validate",
-  stats: baseUrl + "/stats/"
+  stats: baseUrl + "/stats",
+  totalDieCount: baseUrl + "/stats/diecount_sum"
 };
