@@ -11,7 +11,11 @@ class StatsService[F[_]: Applicative](
   def listDieCount(): F[Array[DieCount]] =
     dieCountRepository.list()
 
-  def getAllResults() = ???
+  def getTopDieCount(count: Int): F[Array[DieCount]] =
+    dieCountRepository.listTop(count)
+
+  def getTotalDieCount(): F[Option[Int]] =
+    dieCountRepository.getDieCountSum()
 
   def createDieCount(dice: Array[DieCount]): F[List[DieCount]] =
     dice.toList.map(dieCountRepository.upsert).sequence

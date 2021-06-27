@@ -1,4 +1,8 @@
 export interface DieCount {
-    sides: number,
-    freq: number
+  sides: number,
+  frequency: number
+}
+
+export interface DieCountSum {
+  total: number
 }

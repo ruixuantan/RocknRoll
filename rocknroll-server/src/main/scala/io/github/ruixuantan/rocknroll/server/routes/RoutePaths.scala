@@ -8,7 +8,8 @@ object RoutePaths {
 }
 
 object RouteSuffixes {
-  val dieValidate   = "validate"
-  val statsDiecount = "diecount"
-  val statsResult   = "results"
+  val dieValidate      = "validate"
+  val statsDiecount    = "diecount"
+  val statsResult      = "results"
+  val statsDiecountSum = "diecount_sum"
 }
