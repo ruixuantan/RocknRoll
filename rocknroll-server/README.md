@@ -1,5 +1,14 @@
 # Server
 
+## Setting up Postgres
+After installing Postgres, on the command line:
+```
+psql
+postgres=# create database rocknroll;
+postgres=# create user rocknroll with encrypted password 'rocknroll_password';
+postgres=# grant all privileges on database rocknroll to rocknroll;
+```
+
 ## API endpoints
 
 ### Evaluate die string
@@ -12,15 +21,36 @@
 
 * Sample Call
     ```
-    8d6 + 5
+    8d6 + 5 / d20
     ```
 
 * Success Response:
     * Code: 200
     ```json
     {
-        "results": 28,
-        "expected": 33
+        "resultString": "31 / 6",
+        "expected": "33.0 / 10.5",
+        "standardDeviation": "4.83 / 5.766",
+        "results": [
+          {
+            "input": "8d6 + 5",
+            "result": 31,
+            "expected": 33.0,
+            "standardDeviation": 4.83,
+            "lowerBound": 13,
+            "upperBound": 53,
+            "diceRolled": 8
+          },
+          {
+            "input": "d20",
+            "result": 6,
+            "expected": 10.5,
+            "standardDeviation": 5.766,
+            "lowerBound": 1,
+            "upperBound": 20,
+            "diceRolled": 1
+          } 
+        ]   
     }
     ```
 
@@ -99,3 +129,40 @@
 
 * Success Response:
   * Code: 200
+  
+### List Die Count
+| Method | URL | URL Params |
+| ------ | --- | ---------- |
+| `GET` | /api/v1/stats | None |
+
+* Data Params: None
+
+* Success Response:
+  * Code: 200
+  ```json
+    [
+      {
+        "sides": 6,
+        "frequency": 211
+      },
+      {
+        "sides": 8,
+        "frequency": 101
+      }
+    ]
+  ```
+  
+### Get total dice rolled
+| Method | URL | URL Params |
+| ------ | --- | ---------- |
+| `GET` | /api/v1/stats/diecount_sum | None |
+
+* Data Params: None
+
+* Success Response:
+  * Code: 200
+  ```json
+    {
+      "total": 1098
+    }  
+  ```
