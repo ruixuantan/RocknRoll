@@ -8,7 +8,7 @@ import io.github.ruixuantan.rocknroll.core.results.ResultInstances._
 import io.github.ruixuantan.rocknroll.core.results.ResultSyntax._
 import org.scalatest.funsuite.AnyFunSuite
 
-class ResultServiceTest extends AnyFunSuite {
+class ResultAlgebraInterpreterTest extends AnyFunSuite {
 
   test("ResultService getResult of d15") {
     val res = Die(15, 1).getResult

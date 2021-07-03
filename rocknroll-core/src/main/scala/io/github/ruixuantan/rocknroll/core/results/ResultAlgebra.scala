@@ -10,15 +10,7 @@ trait ResultAlgebra {
 
 object ResultInstances {
   implicit val resultAlgebraInterpreter: ResultAlgebra =
-    new ResultAlgebra {
-      override def identity: Result = ResultService.identity
-
-      override def add(x: Result)(y: Result): Result =
-        ResultService.add(x)(y)
-
-      override def subtract(x: Result)(y: Result): Result =
-        ResultService.subtract(x)(y)
-    }
+    ResultAlgebraInterpreter()
 }
 
 object ResultSyntax {

@@ -1,6 +1,6 @@
 package io.github.ruixuantan.rocknroll.core.results
 
-object ResultService {
+class ResultAlgebraInterpreter extends ResultAlgebra {
   def identity: Result = Result(0, 0, 0, 0, 0, 0)
 
   def add(x: Result)(y: Result): Result =
@@ -22,4 +22,8 @@ object ResultService {
       x.upperBound - y.lowerBound,
       x.diceRolled + y.diceRolled,
     )
+}
+
+object ResultAlgebraInterpreter {
+  def apply(): ResultAlgebraInterpreter = new ResultAlgebraInterpreter()
 }

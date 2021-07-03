@@ -52,7 +52,7 @@ class DieParserService(tokenParser: TokenParser) extends DieParserAlgebra {
       result.diceRolled,
     )
 
-  def handleOther(
+  def handleEvalOperator(
       tokens: List[Token],
       op: Operator,
       acc: Result,
@@ -75,7 +75,7 @@ class DieParserService(tokenParser: TokenParser) extends DieParserAlgebra {
   ): Either[ParseOrderError.type, Result] =
     tokens.headOption
       .map({
-        case op: Operator => handleOther(tokens.tail, op, acc)
+        case op: Operator => handleEvalOperator(tokens.tail, op, acc)
         case _            => Left(ParseOrderError)
       })
       .getOrElse(Right(acc))

@@ -12,22 +12,16 @@ object ValueInstances {
   implicit val valueAlgebraInterpreter: ValueAlgebra[Value] =
     new ValueAlgebra[Value] {
       override def getResult(value: Value): Result = value match {
-        case die: Die       => DieService.getResult(die)
-        case number: Number => NumberService.getResult(number)
+        case die: Die       => dieAlgebraInterpreter.getResult(die)
+        case number: Number => numberAlgebraInterpreter.getResult(number)
       }
     }
 
   implicit val dieAlgebraInterpreter: ValueAlgebra[Die] =
-    new ValueAlgebra[Die] {
-      override def getResult(value: Die): Result =
-        DieService.getResult(value)
-    }
+    DieAlgebraInterpreter()
 
   implicit val numberAlgebraInterpreter: ValueAlgebra[Number] =
-    new ValueAlgebra[Number] {
-      override def getResult(value: Number): Result =
-        NumberService.getResult(value)
-    }
+    NumberAlgebraInterpreter()
 }
 
 object ValueSyntax {
