@@ -35,10 +35,14 @@ class DieRoute[F[_]: Sync] extends Http4sDsl[F] {
         msg <- req.as[String]
         res <- dieService
           .eval(msg)
-          .flatMap {
-            case response: ValidResponse   => Ok(response)
-            case response: InvalidResponse => BadRequest(response.msg)
-            case _                         => InternalServerError()
+          .flatMap { response =>
+            response.dto match {
+              case valid: ValidResponse =>
+                response.actions.foreach(f => f())
+                Ok(valid)
+              case invalid: InvalidResponse => BadRequest(invalid.msg)
+              case _                        => InternalServerError()
+            }
           }
       } yield res
     }

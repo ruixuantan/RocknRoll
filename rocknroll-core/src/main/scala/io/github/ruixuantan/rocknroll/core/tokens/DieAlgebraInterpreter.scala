@@ -8,7 +8,7 @@ import io.github.ruixuantan.rocknroll.core.results.Result
 import io.github.ruixuantan.rocknroll.core.tokens.Value.Die
 import io.github.ruixuantan.rocknroll.core.utils.MathUtil
 
-class DieService(generator: Generator) extends ValueAlgebra[Die] {
+class DieAlgebraInterpreter(generator: Generator) extends ValueAlgebra[Die] {
   private def getVariance(die: Die): Double = {
     val variance = (((die.sides * die.sides) - 1) / 12.toDouble) * die.frequency
     MathUtil.round(variance, 4)
@@ -33,7 +33,7 @@ class DieService(generator: Generator) extends ValueAlgebra[Die] {
   }
 }
 
-object DieService {
-  def apply(generator: Generator = DefaultGenerator) =
-    new DieService(generator)
+object DieAlgebraInterpreter {
+  def apply(generator: Generator = DefaultGenerator): DieAlgebraInterpreter =
+    new DieAlgebraInterpreter(generator)
 }

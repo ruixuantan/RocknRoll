@@ -15,6 +15,7 @@ import io.github.ruixuantan.rocknroll.server.dto.{
 }
 import io.github.ruixuantan.rocknroll.server.models.{DieCount, Results}
 import io.github.ruixuantan.rocknroll.server.routes.{RoutePaths, RouteSuffixes}
+import io.github.ruixuantan.rocknroll.server.utils.ActionableResponse
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -41,7 +42,7 @@ class DieService[F[_]: Applicative](
 
   private def saveDieCount(
       tokens: Either[ParseError, List[Token]],
-  ): Future[_] =
+  ): Future[Unit] =
     Future {
       val body = for {
         t <- tokens
@@ -58,7 +59,7 @@ class DieService[F[_]: Applicative](
       )
     }
 
-  private def saveResult(input: String, results: String): Future[_] =
+  private def saveResult(input: String, results: String): Future[Unit] =
     Future {
       HttpService.post(
         baseUrl + RoutePaths.StatsRoutePath.path + RouteSuffixes.statsResult,
@@ -66,7 +67,7 @@ class DieService[F[_]: Applicative](
       )
     }
 
-  def eval(input: String): F[DieResponse] = {
+  def eval(input: String): F[ActionableResponse[DieResponse]] = {
     val tokens = for {
       tokens <- coreAlgebra.parse(input)
     } yield tokens
@@ -76,18 +77,22 @@ class DieService[F[_]: Applicative](
       res <- coreAlgebra.eval(t)
     } yield res
 
-    val response: DieResponse = results match {
+    val response: ActionableResponse[DieResponse] = results match {
       case Right(res) =>
-        val validResponse = ValidResponse(
-          res.map(_.result).mkString(" / "),
-          res.map(_.expected).mkString(" / "),
-          res.map(_.standardDeviation).mkString(" / "),
-          res.toArray,
+        val resultString = res.map(_.result).mkString(" / ")
+        ActionableResponse(
+          ValidResponse(
+            resultString,
+            res.map(_.expected).mkString(" / "),
+            res.map(_.standardDeviation).mkString(" / "),
+            res.toArray,
+          ),
+          List(
+            () => saveDieCount(tokens),
+            () => saveResult(input, resultString),
+          ),
         )
-        saveDieCount(tokens)
-        saveResult(input, validResponse.resultString)
-        validResponse
-      case Left(err) => InvalidResponse(err.msg)
+      case Left(err) => ActionableResponse(InvalidResponse(err.msg), null)
     }
     response.pure[F]
   }

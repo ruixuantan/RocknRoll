@@ -7,6 +7,7 @@ import io.github.ruixuantan.rocknroll.core.tokens.Operator.{
 }
 import io.github.ruixuantan.rocknroll.core.tokens.Token
 import io.github.ruixuantan.rocknroll.core.tokens.Value.{Die, Number}
+import io.github.ruixuantan.rocknroll.core.tokens.TokenInstances.tokenAlgebraInterpreter.prettyPrint
 
 import scala.annotation.tailrec
 import scala.collection.mutable.ListBuffer
@@ -28,19 +29,8 @@ class TokenParser {
   private def convertToNumber(input: String): Token =
     Number(input.toInt)
 
-  def prettyPrintToken(input: Token): String =
-    input match {
-      case die: Die =>
-        if (die.frequency == 1) s"d${die.sides}"
-        else s"${die.frequency}d${die.sides}"
-      case number: Number => number.number.toString
-      case Add            => "+"
-      case Subtract       => "-"
-      case Separate       => "/"
-    }
-
   def prettyPrintTokens(input: List[Token]): String =
-    input.map(prettyPrintToken).mkString(" ")
+    input.map(prettyPrint).mkString(" ")
 
   def tokenizeValue(token: String): Either[ParseError, Token] =
     token match {
