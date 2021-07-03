@@ -5,7 +5,7 @@ import io.github.ruixuantan.rocknroll.core.tokens.Value.Die
 import org.scalatest.funsuite.AnyFunSuite
 
 class DieServiceTest extends AnyFunSuite {
-  private val service = DieService()
+  private val service = DieService
 
   test("DieService roll single d12") {
     val res = service.getResult(Die(12, 1))

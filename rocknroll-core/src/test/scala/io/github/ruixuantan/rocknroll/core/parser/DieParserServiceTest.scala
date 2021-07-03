@@ -1,19 +1,16 @@
 package io.github.ruixuantan.rocknroll.core.parser
 
-import io.github.ruixuantan.rocknroll.core.results.ResultService
 import io.github.ruixuantan.rocknroll.core.tokens.Operator.{
   Add,
   Separate,
   Subtract,
 }
 import io.github.ruixuantan.rocknroll.core.tokens.Value.{Die, Number}
-import io.github.ruixuantan.rocknroll.core.tokens.{DieService, NumberService}
 import org.scalatest.funsuite.AnyFunSuite
 
 class DieParserServiceTest extends AnyFunSuite {
   private val tokenParser      = TokenParser()
-  private val resultService    = ResultService(DieService(), NumberService())
-  private val dieParserService = DieParserService(tokenParser, resultService)
+  private val dieParserService = DieParserService(tokenParser)
 
   test("DieParserService parse d20") {
     assert(dieParserService.parse("d20") == Right(List(Die(20, 1))))
@@ -71,7 +68,6 @@ class DieParserServiceTest extends AnyFunSuite {
   }
 
   test("DieParserService eval d20") {
-
     assert(dieParserService.eval(List(Die(20, 1))) match {
       case Right(results) =>
         (results.map(_.input) == List("d20")) &

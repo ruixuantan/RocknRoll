@@ -1,14 +1,14 @@
 package io.github.ruixuantan.rocknroll.core.tokens
 
-trait Token
+sealed trait Token
 
-trait Value extends Token
+sealed trait Value extends Token
 object Value {
   case class Die(sides: Int, frequency: Int) extends Value
   case class Number(number: Int)             extends Value
 }
 
-trait Operator extends Token
+sealed trait Operator extends Token
 object Operator {
   case object Add      extends Operator
   case object Subtract extends Operator

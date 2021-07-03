@@ -7,26 +7,14 @@ import io.github.ruixuantan.rocknroll.core.parser.{
   ParseError,
   TokenParser,
 }
-import io.github.ruixuantan.rocknroll.core.results.{
-  ResultAlgebra,
-  ResultService,
-}
-import io.github.ruixuantan.rocknroll.core.tokens.Value.{Die, Number}
-import io.github.ruixuantan.rocknroll.core.tokens.{
-  DieService,
-  NumberService,
-  Token,
-  ValueAlgebra,
-}
+import io.github.ruixuantan.rocknroll.core.tokens.Value.Die
+import io.github.ruixuantan.rocknroll.core.tokens.Token
 
 object CoreService extends CoreAlgebra {
 
-  val dieService: ValueAlgebra[Die]       = DieService()
-  val numberService: ValueAlgebra[Number] = NumberService()
-  val resultService: ResultAlgebra        = ResultService(dieService, numberService)
-  val tokenParser: TokenParser            = TokenParser()
+  val tokenParser: TokenParser = TokenParser()
   val dieParserService: DieParserAlgebra =
-    DieParserService(tokenParser, resultService)
+    DieParserService(tokenParser)
 
   override def parse(input: String): Either[ParseError, List[Token]] =
     dieParserService.parse(input)

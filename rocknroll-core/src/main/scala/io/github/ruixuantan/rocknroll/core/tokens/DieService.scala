@@ -1,14 +1,13 @@
 package io.github.ruixuantan.rocknroll.core.tokens
 
-import io.github.ruixuantan.rocknroll.core.generators.{
-  DefaultGenerator,
-  Generator,
-}
+import io.github.ruixuantan.rocknroll.core.generators.DefaultGenerator
 import io.github.ruixuantan.rocknroll.core.results.Result
 import io.github.ruixuantan.rocknroll.core.tokens.Value.Die
 import io.github.ruixuantan.rocknroll.core.utils.MathUtil
 
-class DieService(generator: Generator) extends ValueAlgebra[Die] {
+object DieService {
+  val generator = DefaultGenerator
+
   private def getVariance(die: Die): Double = {
     val variance = (((die.sides * die.sides) - 1) / 12.toDouble) * die.frequency
     MathUtil.round(variance, 4)
@@ -31,9 +30,4 @@ class DieService(generator: Generator) extends ValueAlgebra[Die] {
       die.frequency,
     )
   }
-}
-
-object DieService {
-  def apply(generator: Generator = DefaultGenerator) =
-    new DieService(generator)
 }
