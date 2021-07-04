@@ -31,13 +31,13 @@ export class CustomDashboardComponent implements OnInit {
 
   onClickCreateCustom() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = {name: '', command: ''};
+    dialogConfig.data = { name: '', command: '' };
     this.customDialog.open(CustomFormComponent, dialogConfig);
   }
 
   onClickEdit(custom: Custom) {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = custom; 
+    dialogConfig.data = custom;
     this.customDialog.open(CustomFormComponent, dialogConfig);
   }
 

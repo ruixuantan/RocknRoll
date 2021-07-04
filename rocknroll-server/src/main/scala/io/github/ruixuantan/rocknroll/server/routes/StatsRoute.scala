@@ -10,7 +10,6 @@ import io.github.ruixuantan.rocknroll.server.services.StatsService
 import org.http4s.circe.CirceEntityCodec.circeEntityEncoder
 import org.http4s.circe.jsonOf
 import org.http4s.dsl.Http4sDsl
-import org.http4s.dsl.impl.QueryParamDecoderMatcher
 import org.http4s.server.middleware.CORS
 import org.http4s.{EntityDecoder, HttpRoutes}
 

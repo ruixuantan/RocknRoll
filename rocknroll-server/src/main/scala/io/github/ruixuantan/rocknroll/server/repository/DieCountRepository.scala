@@ -3,7 +3,6 @@ package io.github.ruixuantan.rocknroll.server.repository
 import cats.effect.Sync
 import doobie.implicits._
 import doobie.{Query0, Transactor, Update0}
-import io.github.ruixuantan.rocknroll.server.dto.DieCountSum
 import io.github.ruixuantan.rocknroll.server.models.DieCount
 import io.github.ruixuantan.rocknroll.server.services.DieCountRepositoryAlgebra
 

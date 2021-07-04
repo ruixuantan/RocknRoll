@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Custom } from 'src/app/models/Custom';
 import { CustomService } from 'src/app/services/custom.service';
 import { DiceService } from 'src/app/services/dice.service';
-import {Paths} from "../../../paths";
+import { Paths } from "../../../paths";
 
 @Component({
   selector: 'app-custom-form',
