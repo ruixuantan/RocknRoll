@@ -19,7 +19,7 @@ export class DiceComponent {
   constructor(private diceService: DiceService, private customService: CustomService, private readonly dieGraphDialog: MatDialog) { }
 
   updateDieResults(input: string, output: string, expected: string, standardDeviation: string, result: DieSingleResult[]) {
-    this.dieResults.unshift({input: input, output: output, expected: expected, standardDeviation: standardDeviation, result: result});
+    this.dieResults.unshift({ input: input, output: output, expected: expected, standardDeviation: standardDeviation, result: result });
     this.dieResults.pop();
     this.dieResults = [...this.dieResults];
   }

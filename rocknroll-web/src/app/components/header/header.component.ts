@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Paths} from "../../paths";
+import { Paths } from "../../paths";
 
 @Component({
   selector: 'app-header',

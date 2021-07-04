@@ -28,6 +28,6 @@ export interface DieRow {
   result: DieSingleResult[]
 }
 
-const emptyDieResult = {input: '', output: '', expected: '', standardDeviation: ''};
+const emptyDieResult = { input: '', output: '', expected: '', standardDeviation: '' };
 
 export const DieTemplate: DieRow[] = Array(10).fill(emptyDieResult);
