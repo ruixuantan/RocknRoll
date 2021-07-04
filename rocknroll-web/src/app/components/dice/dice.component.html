@@ -3,7 +3,8 @@
     <div>
       <mat-form-field class="die-command-input" appearance="fill">
         <mat-label>Roll the die!</mat-label>
-        <input matInput type="text" [(ngModel)]="dieCommandInput" (keydown.enter)="parseDieInput(dieCommandInput)">
+        <input matInput type="text" [(ngModel)]="dieCommandInput" (keydown.enter)="parseDieInput(dieCommandInput)" 
+          (keydown.arrowup)="getPrevCommand()" (keydown.arrowdown)="getNextCommand()" autocomplete="off">
         <button mat-button *ngIf="dieCommandInput" matSuffix mat-icon-button aria-label="Clear"
           (click)="dieCommandInput=''">
           <mat-icon>close</mat-icon>
