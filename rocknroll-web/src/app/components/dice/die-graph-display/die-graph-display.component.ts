@@ -19,16 +19,18 @@ export class DieGraphDisplayComponent implements OnInit {
   chartOptions: Highcharts.Options = {};
 
   ngOnInit(): void {
+    const lowerBoundMin = Math.min(...this.dieResults.map((dieResult) => dieResult.lowerBound));
+    const upperBoundMax = Math.max(...this.dieResults.map((dieResult) => dieResult.upperBound));
     this.chartOptions.series = this.dieResults
       .map((dieResult) => {
         if (dieResult.diceRolled === 1) {
           return { name: dieResult.input, data: new Array(dieResult.upperBound + 1).fill(1), type: 'column' };
         }
-        return { name: dieResult.input, data: this.getPoints(dieResult), type: 'column' };
+        return { name: dieResult.input, data: this.getPoints(dieResult, lowerBoundMin), type: 'column' };
       });
     this.chartOptions.xAxis = [{
-      min: Math.min(...this.dieResults.map((dieResult) => dieResult.lowerBound)),
-      max: Math.max(...this.dieResults.map((dieResult) => dieResult.upperBound)),
+      min: lowerBoundMin,
+      max: upperBoundMax,
       plotBands: this.dieResults.map((dieResult) => ({
         borderWidth: 1,
         borderColor: '#EC407A',
@@ -49,8 +51,8 @@ export class DieGraphDisplayComponent implements OnInit {
     return Math.exp((-0.5) * ((x - mean) / standardDeviation) ** 2);
   }
 
-  private getPoints(dieResult: DieSingleResult): number[][] {
-    return [...Array(dieResult.upperBound).keys()]
-      .map((x) => [x + 1, this.getYCoordinate(x + 1, dieResult.expected, dieResult.standardDeviation)]);
+  private getPoints(dieResult: DieSingleResult, min: number): number[][] {
+    return [...Array(dieResult.upperBound - dieResult.lowerBound + 1).keys()]
+      .map((x) => [x + min, this.getYCoordinate(x + min, dieResult.expected, dieResult.standardDeviation)]);
   }
 }

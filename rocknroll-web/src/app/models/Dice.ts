@@ -9,6 +9,7 @@ export interface DieSingleResult {
 }
 
 export interface DieResult {
+  inputString: string,
   resultString: string,
   expected: string,
   standardDeviation: string,

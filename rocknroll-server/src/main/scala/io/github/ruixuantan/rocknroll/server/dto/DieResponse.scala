@@ -4,6 +4,7 @@ import io.github.ruixuantan.rocknroll.core.parser.FinalResult
 
 sealed trait DieResponse
 case class ValidResponse(
+    inputString: String,
     resultString: String,
     expected: String,
     standardDeviation: String,

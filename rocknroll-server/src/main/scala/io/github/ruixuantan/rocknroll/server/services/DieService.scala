@@ -71,6 +71,7 @@ class DieService[F[_]: Applicative](
         val resultString = res.map(_.result).mkString(" / ")
         ActionableResponse(
           ValidResponse(
+            res.map(_.input).mkString(" / "),
             resultString,
             res.map(_.expected).mkString(" / "),
             res.map(_.standardDeviation).mkString(" / "),
