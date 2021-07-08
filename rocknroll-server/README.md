@@ -28,6 +28,7 @@ postgres=# grant all privileges on database rocknroll to rocknroll;
     * Code: 200
     ```json
     {
+        "inputString": "8d6 + 5 / d20",
         "resultString": "31 / 6",
         "expected": "33.0 / 10.5",
         "standardDeviation": "4.83 / 5.766",
