@@ -9,20 +9,22 @@ import { CustomFormComponent } from '../custom-form/custom-form.component';
 @Component({
   selector: 'app-custom-dashboard',
   templateUrl: './custom-dashboard.component.html',
-  styleUrls: ['./custom-dashboard.component.css']
+  styleUrls: ['./custom-dashboard.component.css'],
 })
 export class CustomDashboardComponent implements OnInit {
-
   customStore: CustomStore = {
-    store: new Set<Custom>()
-  }
-  displayCustoms: Custom[] = []
-  displayedColumns = ['name', 'command', 'action']
+    store: new Set<Custom>(),
+  };
+
+  displayCustoms: Custom[] = [];
+
+  displayedColumns = ['name', 'command', 'action'];
 
   constructor(
     private readonly customDialog: MatDialog,
     private readonly deleteAlertDialog: MatDialog,
-    private customService: CustomService) { }
+    private customService: CustomService,
+  ) { }
 
   ngOnInit(): void {
     this.customStore = this.customService.loadCustoms(this.customStore);

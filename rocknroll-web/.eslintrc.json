@@ -16,9 +16,13 @@
       },
       "extends": [
         "plugin:@angular-eslint/recommended",
-        "plugin:@angular-eslint/template/process-inline-templates"
+        "plugin:@angular-eslint/template/process-inline-templates",
+        "airbnb-typescript/base"
       ],
+      "parser": "@typescript-eslint/parser",
+      "plugins": ["@typescript-eslint"],
       "rules": {
+        "max-len": [2, {"code": 120, "tabWidth": 2, "ignoreUrls": true}],
         "semi": [2, "always"],
         "@angular-eslint/directive-selector": [
           "error",
@@ -35,7 +39,13 @@
             "prefix": "app",
             "style": "kebab-case"
           }
-        ]
+        ],
+        "import/prefer-default-export": 0,
+        "no-console": 0,
+        "class-methods-use-this": 0,
+        "@typescript-eslint/no-unused-expressions": 0,
+        "no-param-reassign": 0,
+        "no-empty": 0
       }
     },
     {

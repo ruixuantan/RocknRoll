@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CommandHistoryService {
-
   pointer: number = 0;
-  committedCommandHistory: string[] = [];
-  commandHistory: string[] = [];
-  hasBeenSet: boolean = false;
 
-  constructor() { }
+  committedCommandHistory: string[] = [];
+
+  commandHistory: string[] = [];
+
+  hasBeenSet: boolean = false;
 
   reset() {
     this.pointer = 0;
@@ -33,7 +33,7 @@ export class CommandHistoryService {
     } else {
       this.commandHistory[this.pointer] = command;
       if (this.pointer > 0) {
-        this.pointer--;
+        this.pointer -= 1;
       }
     }
     return this.commandHistory[this.pointer];
@@ -42,7 +42,7 @@ export class CommandHistoryService {
   getNextCommand(command: string): string {
     if (this.pointer < this.commandHistory.length - 1) {
       this.commandHistory[this.pointer] = command;
-      this.pointer++;
+      this.pointer += 1;
     }
     return this.commandHistory[this.pointer];
   }

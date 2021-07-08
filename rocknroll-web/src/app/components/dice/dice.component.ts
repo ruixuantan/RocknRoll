@@ -9,22 +9,32 @@ import { DieGraphDialogComponent } from './die-graph-dialog/die-graph-dialog.com
 @Component({
   selector: 'app-dice',
   templateUrl: './dice.component.html',
-  styleUrls: ['./dice.component.css']
+  styleUrls: ['./dice.component.css'],
 })
 export class DiceComponent {
-
   dieResults: DieRow[] = [...DieTemplate];
+
   displayedColumns: string[] = ['input', 'output', 'expected', 'standardDeviation'];
+
   dieCommandInput = '';
 
   constructor(
     private diceService: DiceService,
     private customService: CustomService,
     private commandHistory: CommandHistoryService,
-    private readonly dieGraphDialog: MatDialog) { }
+    private readonly dieGraphDialog: MatDialog,
+  ) { }
 
-  updateDieResults(input: string, output: string, expected: string, standardDeviation: string, result: DieSingleResult[]) {
-    this.dieResults.unshift({ input: input, output: output, expected: expected, standardDeviation: standardDeviation, result: result });
+  updateDieResults(
+    input: string,
+    output: string,
+    expected: string,
+    standardDeviation: string,
+    result: DieSingleResult[],
+  ) {
+    this.dieResults.unshift({
+      input, output, expected, standardDeviation, result,
+    });
     this.dieResults.pop();
     this.dieResults = [...this.dieResults];
   }
@@ -40,8 +50,10 @@ export class DiceComponent {
     } catch (err) { }
     this.diceService.parseDieInput(input)
       .subscribe(
-        res => this.updateDieResults(displayInput, res.resultString, res.expected, res.standardDeviation, res.results),
-        err => this.updateDieResults(displayInput, err.error, '', '', [])
+        (res) => this.updateDieResults(
+          displayInput, res.resultString, res.expected, res.standardDeviation, res.results,
+        ),
+        (err) => this.updateDieResults(displayInput, err.error, '', '', []),
       );
     this.commandHistory.commit(this.dieCommandInput);
     this.dieCommandInput = '';

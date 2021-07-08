@@ -3,11 +3,7 @@ package io.github.ruixuantan.rocknroll.core.parser
 import cats.implicits._
 import io.github.ruixuantan.rocknroll.core.results.Result
 import io.github.ruixuantan.rocknroll.core.tokens.{Operator, Token, Value}
-import io.github.ruixuantan.rocknroll.core.tokens.Operator.{
-  Add,
-  Separate,
-  Subtract,
-}
+import io.github.ruixuantan.rocknroll.core.tokens.Operator.{Add, Separate, Subtract}
 import io.github.ruixuantan.rocknroll.core.tokens.ValueInstances._
 import io.github.ruixuantan.rocknroll.core.tokens.ValueSyntax._
 import io.github.ruixuantan.rocknroll.core.results.ResultInstances._
@@ -30,12 +26,8 @@ class DieParserService(tokenParser: TokenParser) extends DieParserAlgebra {
         tokens.head.isInstanceOf[Value]
       } else {
         prev match {
-          case _: Value =>
-            tokens.head
-              .isInstanceOf[Operator] && validateInner(tokens.tail, tokens.head)
-          case _: Operator =>
-            tokens.head
-              .isInstanceOf[Value] && validateInner(tokens.tail, tokens.head)
+          case _: Value    => tokens.head.isInstanceOf[Operator] && validateInner(tokens.tail, tokens.head)
+          case _: Operator => tokens.head.isInstanceOf[Value] && validateInner(tokens.tail, tokens.head)
         }
       }
     validateInner(tokens, Operator.Add)
@@ -89,26 +81,16 @@ class DieParserService(tokenParser: TokenParser) extends DieParserAlgebra {
     if (tokens.isEmpty)
       lsBuffer.addOne(tokenBuffer.toList).toList
     else if (tokens.head == Separate)
-      separateTokens(
-        tokens.tail,
-        new ListBuffer[Token](),
-        lsBuffer.addOne(tokenBuffer.toList),
-      )
+      separateTokens(tokens.tail, new ListBuffer[Token](), lsBuffer.addOne(tokenBuffer.toList))
     else
       separateTokens(tokens.tail, tokenBuffer.addOne(tokens.head), lsBuffer)
 
   override def eval(
       tokens: List[Token],
   ): Either[ParseError, List[FinalResult]] = {
-    val separated = separateTokens(
-      tokens,
-      new ListBuffer[Token](),
-      new ListBuffer[List[Token]](),
-    )
+    val separated = separateTokens(tokens, new ListBuffer[Token](), new ListBuffer[List[Token]]())
     for {
-      results <- separated
-        .map(tokenList => evalTokens(Add :: tokenList, identity))
-        .sequence
+      results <- separated.map(tokenList => evalTokens(Add :: tokenList, identity)).sequence
     } yield separated.zip(results).map(elem => getFinalResult(elem._1, elem._2))
   }
 }

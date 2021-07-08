@@ -7,12 +7,7 @@ import io.circe.syntax.EncoderOps
 import io.github.ruixuantan.rocknroll.core.CoreAlgebra
 import io.github.ruixuantan.rocknroll.core.parser.ParseError
 import io.github.ruixuantan.rocknroll.core.tokens.Token
-import io.github.ruixuantan.rocknroll.server.dto.{
-  DieResponse,
-  InvalidResponse,
-  ValidResponse,
-  ValidateResponse,
-}
+import io.github.ruixuantan.rocknroll.server.dto.{DieResponse, InvalidResponse, ValidResponse, ValidateResponse}
 import io.github.ruixuantan.rocknroll.server.models.{DieCount, Results}
 import io.github.ruixuantan.rocknroll.server.routes.{RoutePaths, RouteSuffixes}
 import io.github.ruixuantan.rocknroll.server.utils.ActionableResponse
@@ -31,10 +26,7 @@ class DieService[F[_]: Applicative](
 
     val response: DieResponse = tokens match {
       case Right(t) =>
-        ValidateResponse(
-          coreAlgebra.validate(t),
-          coreAlgebra.prettyPrint(t),
-        )
+        ValidateResponse(coreAlgebra.validate(t), coreAlgebra.prettyPrint(t))
       case Left(_) => ValidateResponse(isValid = false, input)
     }
     response.pure[F]
@@ -53,10 +45,7 @@ class DieService[F[_]: Applicative](
         .toString
       for {
         b <- body
-      } yield HttpService.post(
-        baseUrl + RoutePaths.StatsRoutePath.path + RouteSuffixes.statsDiecount,
-        b,
-      )
+      } yield HttpService.post(baseUrl + RoutePaths.StatsRoutePath.path + RouteSuffixes.statsDiecount, b)
     }
 
   private def saveResult(input: String, results: String): Future[Unit] =
@@ -87,10 +76,7 @@ class DieService[F[_]: Applicative](
             res.map(_.standardDeviation).mkString(" / "),
             res.toArray,
           ),
-          List(
-            () => saveDieCount(tokens),
-            () => saveResult(input, resultString),
-          ),
+          List(() => saveDieCount(tokens), () => saveResult(input, resultString)),
         )
       case Left(err) => ActionableResponse(InvalidResponse(err.msg), null)
     }
