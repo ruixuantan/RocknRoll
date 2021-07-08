@@ -51,7 +51,7 @@ export class DiceComponent {
     this.diceService.parseDieInput(input)
       .subscribe(
         (res) => this.updateDieResults(
-          displayInput, res.resultString, res.expected, res.standardDeviation, res.results,
+          res.inputString, res.resultString, res.expected, res.standardDeviation, res.results,
         ),
         (err) => this.updateDieResults(displayInput, err.error, '', '', []),
       );
