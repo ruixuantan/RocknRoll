@@ -1,20 +1,16 @@
 import { Injectable } from '@angular/core';
-import { Custom, CustomStore, } from '../models/Custom';
+import { Custom, CustomStore } from '../models/Custom';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CustomService {
-
-  constructor() { }
-
   getCustom(name: string): Custom {
     const customString = localStorage.getItem(name.toLowerCase());
     if (customString != null) {
       return JSON.parse(customString) as Custom;
-    } else {
-      throw new Error(`Custom command ${name} does not exist`);
     }
+    throw new Error(`Custom command ${name} does not exist`);
   }
 
   storeCustom(custom: Custom) {
@@ -27,7 +23,7 @@ export class CustomService {
 
   loadCustoms(customStore: CustomStore): CustomStore {
     const keys = Object.keys(localStorage);
-    keys.map(key => customStore.store.add(this.getCustom(key)));
+    keys.map((key) => customStore.store.add(this.getCustom(key)));
     return customStore;
   }
 }

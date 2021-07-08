@@ -1,10 +1,3 @@
-export interface DieResult {
-  resultString: string,
-  expected: string,
-  standardDeviation: string,
-  results: DieSingleResult[],
-}
-
 export interface DieSingleResult {
   input: string,
   result: number,
@@ -13,6 +6,13 @@ export interface DieSingleResult {
   lowerBound: number,
   upperBound: number,
   diceRolled: number
+}
+
+export interface DieResult {
+  resultString: string,
+  expected: string,
+  standardDeviation: string,
+  results: DieSingleResult[],
 }
 
 export interface DieValidator {
@@ -28,6 +28,8 @@ export interface DieRow {
   result: DieSingleResult[]
 }
 
-const emptyDieResult = { input: '', output: '', expected: '', standardDeviation: '' };
+const emptyDieResult = {
+  input: '', output: '', expected: '', standardDeviation: '',
+};
 
 export const DieTemplate: DieRow[] = Array(10).fill(emptyDieResult);

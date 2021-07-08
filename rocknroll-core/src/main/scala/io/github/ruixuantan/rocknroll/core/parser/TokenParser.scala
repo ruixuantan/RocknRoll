@@ -1,10 +1,6 @@
 package io.github.ruixuantan.rocknroll.core.parser
 
-import io.github.ruixuantan.rocknroll.core.tokens.Operator.{
-  Add,
-  Separate,
-  Subtract,
-}
+import io.github.ruixuantan.rocknroll.core.tokens.Operator.{Add, Separate, Subtract}
 import io.github.ruixuantan.rocknroll.core.tokens.Token
 import io.github.ruixuantan.rocknroll.core.tokens.Value.{Die, Number}
 import io.github.ruixuantan.rocknroll.core.tokens.TokenInstances.tokenAlgebraInterpreter.prettyPrint
@@ -71,10 +67,8 @@ class TokenParser {
       else {
         val nextChar = input.head.toString
         tokenizeOperator(nextChar) match {
-          case Right(tokenOp) =>
-            handleIsTokenOperator(inputToken, tokenOp, lsBuffer, input)
-          case Left(_) =>
-            parseTokenInner(inputToken + nextChar, input.tail)
+          case Right(tokenOp) => handleIsTokenOperator(inputToken, tokenOp, lsBuffer, input)
+          case Left(_)        => parseTokenInner(inputToken + nextChar, input.tail)
         }
       }
     }

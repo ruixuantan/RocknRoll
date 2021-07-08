@@ -24,7 +24,7 @@ test_and_lint() {
   sbt rocknrollCore/test
   echo Linting web...
   cd rocknroll-web
-  ng lint --fix=true
+  npm run lint:fix
 }
 
 if [[ $1 == "compile" ]]

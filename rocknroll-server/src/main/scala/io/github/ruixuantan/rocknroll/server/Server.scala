@@ -1,32 +1,14 @@
 package io.github.ruixuantan.rocknroll.server
 
-import cats.effect.{
-  Async,
-  Blocker,
-  ConcurrentEffect,
-  ContextShift,
-  ExitCode,
-  IO,
-  IOApp,
-  Resource,
-  Sync,
-  Timer,
-}
+import cats.effect.{Async, Blocker, ConcurrentEffect, ContextShift, ExitCode, IO, IOApp, Resource, Sync, Timer}
 import config.{DbConfig, DbMigrator, LogConfig, RocknRollConfig, ServerConfig}
 import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
 import io.circe.config.parser
 import io.circe.generic.codec.DerivedAsObjectCodec.deriveCodec
 import io.github.ruixuantan.rocknroll.core.CoreService
-import io.github.ruixuantan.rocknroll.server.repository.{
-  DieCountRepository,
-  ResultsRepository,
-}
-import io.github.ruixuantan.rocknroll.server.routes.{
-  DieRoute,
-  RoutePaths,
-  StatsRoute,
-}
+import io.github.ruixuantan.rocknroll.server.repository.{DieCountRepository, ResultsRepository}
+import io.github.ruixuantan.rocknroll.server.routes.{DieRoute, RoutePaths, StatsRoute}
 import io.github.ruixuantan.rocknroll.server.services.{DieService, StatsService}
 import org.http4s.HttpRoutes
 import org.http4s.server.{Router, Server => BlazeServer}
@@ -80,8 +62,7 @@ object Server extends IOApp {
       .resource
   }
 
-  def init[F[_]: ContextShift: ConcurrentEffect: Timer]
-      : Resource[F, BlazeServer[F]] =
+  def init[F[_]: ContextShift: ConcurrentEffect: Timer]: Resource[F, BlazeServer[F]] =
     for {
       conf <- config[F]
       _    <- dbMigrate[F](conf.db)
@@ -90,14 +71,8 @@ object Server extends IOApp {
       dieCountRepository = DieCountRepository[F](xa)
       resultsRepository  = ResultsRepository[F](xa)
       baseUrl            = conf.server.baseUrl
-      dieService = DieService[F](
-        coreService,
-        baseUrl,
-      )
-      statsService = StatsService[F](
-        dieCountRepository,
-        resultsRepository,
-      )
+      dieService         = DieService[F](coreService, baseUrl)
+      statsService       = StatsService[F](dieCountRepository, resultsRepository)
       routes = Router(
         RoutePaths.DieRoutePath.path   -> DieRoute.endpoints[F](dieService),
         RoutePaths.StatsRoutePath.path -> StatsRoute.endpoints[F](statsService),

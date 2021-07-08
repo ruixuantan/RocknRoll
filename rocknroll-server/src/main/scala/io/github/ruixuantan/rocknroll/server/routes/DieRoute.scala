@@ -3,11 +3,7 @@ package io.github.ruixuantan.rocknroll.server.routes
 import cats.effect.Sync
 import cats.implicits._
 import io.circe.generic.codec.DerivedAsObjectCodec.deriveCodec
-import io.github.ruixuantan.rocknroll.server.dto.{
-  InvalidResponse,
-  ValidResponse,
-  ValidateResponse,
-}
+import io.github.ruixuantan.rocknroll.server.dto.{InvalidResponse, ValidResponse, ValidateResponse}
 import io.github.ruixuantan.rocknroll.server.services.DieService
 import org.http4s.HttpRoutes
 import org.http4s.circe.CirceEntityCodec.circeEntityEncoder

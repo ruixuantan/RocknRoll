@@ -2,12 +2,12 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { MaterialModule } from './material.module';
 import { FormsModule } from '@angular/forms';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { MaterialModule } from './material.module';
 
 import { DiceComponent } from './components/dice/dice.component';
 import { HeaderComponent } from './components/header/header.component';
@@ -30,7 +30,7 @@ import { DieGraphDisplayComponent } from './components/dice/die-graph-display/di
     DeleteAlertDialogComponent,
     StatsComponent,
     DieGraphDialogComponent,
-    DieGraphDisplayComponent
+    DieGraphDisplayComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,9 +39,9 @@ import { DieGraphDisplayComponent } from './components/dice/die-graph-display/di
     HttpClientModule,
     MaterialModule,
     FormsModule,
-    HighchartsChartModule
+    HighchartsChartModule,
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule { }
