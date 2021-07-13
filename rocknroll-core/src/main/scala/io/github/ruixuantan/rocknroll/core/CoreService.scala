@@ -1,5 +1,6 @@
 package io.github.ruixuantan.rocknroll.core
 
+import io.github.ruixuantan.rocknroll.core.generators.{DefaultGenerator, Generator}
 import io.github.ruixuantan.rocknroll.core.parser.{
   DieParserAlgebra,
   DieParserService,
@@ -24,8 +25,9 @@ object CoreService extends CoreAlgebra {
 
   override def eval(
       tokens: List[Token],
+      generator: Generator = DefaultGenerator,
   ): Either[ParseError, List[FinalResult]] =
-    dieParserService.eval(tokens)
+    dieParserService.eval(tokens, generator)
 
   override def prettyPrint(
       tokens: List[Token],

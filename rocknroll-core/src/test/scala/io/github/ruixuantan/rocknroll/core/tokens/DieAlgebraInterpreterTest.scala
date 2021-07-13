@@ -1,11 +1,12 @@
 package io.github.ruixuantan.rocknroll.core.tokens
 
+import io.github.ruixuantan.rocknroll.core.generators.DefaultGenerator
 import io.github.ruixuantan.rocknroll.core.results.Result
 import io.github.ruixuantan.rocknroll.core.tokens.Value.Die
 import org.scalatest.funsuite.AnyFunSuite
 
 class DieAlgebraInterpreterTest extends AnyFunSuite {
-  private val service = DieAlgebraInterpreter()
+  private val service = DieAlgebraInterpreter(DefaultGenerator)
 
   test("DieService roll single d12") {
     val res = service.getResult(Die(12, 1))

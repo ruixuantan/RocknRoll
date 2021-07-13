@@ -1,5 +1,6 @@
 package io.github.ruixuantan.rocknroll.core.parser
 
+import io.github.ruixuantan.rocknroll.core.generators.Generator
 import io.github.ruixuantan.rocknroll.core.tokens.Token
 
 trait DieParserAlgebra {
@@ -7,5 +8,5 @@ trait DieParserAlgebra {
 
   def validate(tokens: List[Token]): Boolean
 
-  def eval(tokens: List[Token]): Either[ParseError, List[FinalResult]]
+  def eval(tokens: List[Token], generator: Generator): Either[ParseError, List[FinalResult]]
 }

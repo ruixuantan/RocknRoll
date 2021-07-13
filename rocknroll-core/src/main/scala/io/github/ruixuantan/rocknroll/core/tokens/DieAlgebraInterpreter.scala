@@ -1,9 +1,6 @@
 package io.github.ruixuantan.rocknroll.core.tokens
 
-import io.github.ruixuantan.rocknroll.core.generators.{
-  DefaultGenerator,
-  Generator,
-}
+import io.github.ruixuantan.rocknroll.core.generators.Generator
 import io.github.ruixuantan.rocknroll.core.results.Result
 import io.github.ruixuantan.rocknroll.core.tokens.Value.Die
 import io.github.ruixuantan.rocknroll.core.utils.MathUtil
@@ -34,6 +31,6 @@ class DieAlgebraInterpreter(generator: Generator) extends ValueAlgebra[Die] {
 }
 
 object DieAlgebraInterpreter {
-  def apply(generator: Generator = DefaultGenerator): DieAlgebraInterpreter =
+  def apply(generator: Generator): DieAlgebraInterpreter =
     new DieAlgebraInterpreter(generator)
 }
