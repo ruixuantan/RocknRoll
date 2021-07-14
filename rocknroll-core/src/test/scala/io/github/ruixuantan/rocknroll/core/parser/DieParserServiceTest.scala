@@ -8,7 +8,7 @@ import org.scalatest.funsuite.AnyFunSuite
 class DieParserServiceTest extends AnyFunSuite {
   private val tokenParser      = TokenParser()
   private val dieParserService = DieParserService(tokenParser)
-  private val generator        = TestGenerator
+  private val generator        = TestGenerator()
 
   test("DieParserService parse d20") {
     assert(dieParserService.parse("d20") == Right(List(Die(20, 1))))

@@ -1,5 +1,9 @@
 package io.github.ruixuantan.rocknroll.core.generators
 
-object TestGenerator extends Generator {
-  override def nextInt(range: Int): Int = 1
+class TestGenerator extends Generator {
+  override def nextInt(range: Int): (Int, Generator) = (1, TestGenerator())
+}
+
+object TestGenerator {
+  def apply(): TestGenerator = new TestGenerator()
 }

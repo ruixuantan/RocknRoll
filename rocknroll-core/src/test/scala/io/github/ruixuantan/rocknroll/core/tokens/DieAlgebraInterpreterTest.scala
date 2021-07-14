@@ -6,7 +6,7 @@ import io.github.ruixuantan.rocknroll.core.tokens.Value.Die
 import org.scalatest.funsuite.AnyFunSuite
 
 class DieAlgebraInterpreterTest extends AnyFunSuite {
-  private val service = DieAlgebraInterpreter(DefaultGenerator)
+  private val service = DieAlgebraInterpreter(DefaultGenerator())
 
   test("DieService roll single d12") {
     val res = service.getResult(Die(12, 1))

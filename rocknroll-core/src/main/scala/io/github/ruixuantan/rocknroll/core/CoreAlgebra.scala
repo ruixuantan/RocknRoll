@@ -10,7 +10,7 @@ trait CoreAlgebra {
 
   def validate(tokens: List[Token]): Boolean
 
-  def eval(tokens: List[Token], generator: Generator = DefaultGenerator): Either[ParseError, List[FinalResult]]
+  def eval(tokens: List[Token], generator: Generator = DefaultGenerator()): Either[ParseError, List[FinalResult]]
 
   def prettyPrint(tokens: List[Token]): String
 

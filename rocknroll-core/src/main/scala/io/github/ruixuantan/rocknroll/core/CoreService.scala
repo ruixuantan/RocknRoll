@@ -25,7 +25,7 @@ object CoreService extends CoreAlgebra {
 
   override def eval(
       tokens: List[Token],
-      generator: Generator = DefaultGenerator,
+      generator: Generator = DefaultGenerator(),
   ): Either[ParseError, List[FinalResult]] =
     dieParserService.eval(tokens, generator)
 
