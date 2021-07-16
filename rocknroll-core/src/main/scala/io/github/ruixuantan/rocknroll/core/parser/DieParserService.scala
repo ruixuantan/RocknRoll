@@ -1,7 +1,7 @@
 package io.github.ruixuantan.rocknroll.core.parser
 
 import cats.implicits._
-import io.github.ruixuantan.rocknroll.core.generators.{DefaultGenerator, Generator}
+import io.github.ruixuantan.rocknroll.core.generators.Generator
 import io.github.ruixuantan.rocknroll.core.results.Result
 import io.github.ruixuantan.rocknroll.core.tokens.{Operator, Token, Value}
 import io.github.ruixuantan.rocknroll.core.tokens.Operator.{Add, Separate, Subtract}
@@ -49,17 +49,16 @@ class DieParserService(tokenParser: TokenParser) extends DieParserAlgebra {
       tokens: List[Token],
       op: Operator,
       acc: Result,
-      generator: Generator,
+      valueInstances: ValueInstances,
   ): Either[ParseOrderError.type, Result] = {
-    val valueInstances = ValueInstances(generator)
     import valueInstances.valueAlgebraInterpreter
 
     tokens.headOption
       .map {
         case value: Value =>
           op match {
-            case Add      => evalTokens(tokens.tail, acc + value.getResult, generator)
-            case Subtract => evalTokens(tokens.tail, acc - value.getResult, generator)
+            case Add      => evalTokens(tokens.tail, acc + value.getResult, valueInstances)
+            case Subtract => evalTokens(tokens.tail, acc - value.getResult, valueInstances)
             case _        => Left(ParseOrderError)
           }
         case _ => Left(ParseOrderError)
@@ -70,11 +69,11 @@ class DieParserService(tokenParser: TokenParser) extends DieParserAlgebra {
   def evalTokens(
       tokens: List[Token],
       acc: Result,
-      generator: Generator,
+      valueInstances: ValueInstances,
   ): Either[ParseOrderError.type, Result] =
     tokens.headOption
       .map {
-        case op: Operator => handleEvalOperator(tokens.tail, op, acc, generator)
+        case op: Operator => handleEvalOperator(tokens.tail, op, acc, valueInstances)
         case _            => Left(ParseOrderError)
       }
       .getOrElse(Right(acc))
@@ -96,9 +95,10 @@ class DieParserService(tokenParser: TokenParser) extends DieParserAlgebra {
       tokens: List[Token],
       generator: Generator,
   ): Either[ParseError, List[FinalResult]] = {
-    val separated = separateTokens(tokens, new ListBuffer[Token](), new ListBuffer[List[Token]]())
+    val separated      = separateTokens(tokens, new ListBuffer[Token](), new ListBuffer[List[Token]]())
+    val valueInstances = ValueInstances(generator)
     for {
-      results <- separated.map(tokenList => evalTokens(Add :: tokenList, identity, generator)).sequence
+      results <- separated.map(tokenList => evalTokens(Add :: tokenList, identity, valueInstances)).sequence
     } yield separated.zip(results).map(elem => getFinalResult(elem._1, elem._2))
   }
 }

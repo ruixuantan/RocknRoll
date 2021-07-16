@@ -5,8 +5,10 @@ import scala.util.Random
 class DefaultGenerator extends Generator {
   private val rng = new Random()
 
-  override def nextInt(range: Int): (Int, Generator) =
-    (rng.nextInt(range) + 1, DefaultGenerator())
+  override def getName: String = "default"
+
+  override def nextInt(range: Int): Int =
+    rng.nextInt(range) + 1
 }
 
 object DefaultGenerator {

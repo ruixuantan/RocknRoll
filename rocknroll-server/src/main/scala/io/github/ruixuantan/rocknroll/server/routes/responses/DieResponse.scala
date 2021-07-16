@@ -1,4 +1,4 @@
-package io.github.ruixuantan.rocknroll.server.dto
+package io.github.ruixuantan.rocknroll.server.routes.responses
 
 import io.github.ruixuantan.rocknroll.core.parser.FinalResult
 

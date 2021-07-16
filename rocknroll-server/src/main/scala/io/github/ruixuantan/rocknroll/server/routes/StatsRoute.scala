@@ -4,8 +4,8 @@ import cats.effect.Sync
 import cats.implicits._
 import io.circe.generic.codec.DerivedAsObjectCodec.deriveCodec
 import io.circe.syntax.EncoderOps
-import io.github.ruixuantan.rocknroll.server.dto.DieCountSum
 import io.github.ruixuantan.rocknroll.server.models.{DieCount, Results}
+import io.github.ruixuantan.rocknroll.server.routes.responses.DieCountSum
 import io.github.ruixuantan.rocknroll.server.services.StatsService
 import org.http4s.circe.CirceEntityCodec.circeEntityEncoder
 import org.http4s.circe.jsonOf
@@ -18,8 +18,7 @@ class StatsRoute[F[_]: Sync] extends Http4sDsl[F] {
   implicit val dieCountDecoder: EntityDecoder[F, Array[DieCount]] =
     jsonOf[F, Array[DieCount]]
   implicit val resultsDecoder: EntityDecoder[F, Results] = jsonOf[F, Results]
-  object DieCountQueryParamMatcher
-      extends QueryParamDecoderMatcher[Int]("count")
+  object DieCountQueryParamMatcher extends QueryParamDecoderMatcher[Int]("count")
 
   private def getAllDieCountEndpoint(
       statsService: StatsService[F],

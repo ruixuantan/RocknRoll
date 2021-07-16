@@ -7,5 +7,6 @@ CREATE TABLE IF NOT EXISTS results (
     id SERIAL PRIMARY KEY,
     input_string VARCHAR NOT NULL,
     result VARCHAR NOT NULL,
+    generator VARCHAR(32) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

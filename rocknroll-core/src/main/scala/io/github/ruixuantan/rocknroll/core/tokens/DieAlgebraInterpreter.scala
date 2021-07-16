@@ -7,13 +7,6 @@ import io.github.ruixuantan.rocknroll.core.utils.MathUtil
 
 class DieAlgebraInterpreter(generator: Generator) extends ValueAlgebra[Die] {
 
-  private def rollStream(generator: Generator)(die: Die): LazyList[Int] =
-    generator.nextInt(die.sides) match {
-      case (value, next) => value #:: rollStream(next)(die)
-    }
-
-  val r: Die => LazyList[Int] = rollStream(generator)
-
   private def getVariance(die: Die): Double = {
     val variance = (((die.sides * die.sides) - 1) / 12.toDouble) * die.frequency
     MathUtil.round(variance, 4)
@@ -23,7 +16,7 @@ class DieAlgebraInterpreter(generator: Generator) extends ValueAlgebra[Die] {
     ((die.sides + 1) / 2.toDouble) * die.frequency
 
   private def roll(die: Die): Int =
-    r(die).take(1).head
+    generator.nextInt(die.sides)
 
   def getResult(die: Die): Result = {
     val res = (1 to die.frequency).map(_ => roll(die)).sum
