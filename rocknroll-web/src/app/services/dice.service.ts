@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { DieResult, DieValidator } from '../models/Dice';
+import { DieRequest, DieResult, DieValidator } from '../models/Dice';
 import { PATHS } from './ServiceConfig';
 
 @Injectable({
@@ -16,8 +16,8 @@ export class DiceService {
       .pipe(catchError(DiceService.handleParseError<DieValidator>()));
   }
 
-  parseDieInput(input: string): Observable<DieResult> {
-    return this.http.post<DieResult>(PATHS.dice, input)
+  parseDieInput(dieRequest: DieRequest): Observable<DieResult> {
+    return this.http.post<DieResult>(PATHS.dice, dieRequest)
       .pipe(catchError(DiceService.handleParseError<DieResult>()));
   }
 

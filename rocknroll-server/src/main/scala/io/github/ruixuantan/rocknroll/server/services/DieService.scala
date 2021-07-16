@@ -4,11 +4,18 @@ import cats.Applicative
 import cats.implicits._
 import io.circe.generic.auto._
 import io.circe.syntax.EncoderOps
-import io.github.ruixuantan.rocknroll.core.CoreAlgebra
+import io.github.ruixuantan.rocknroll.core.{CoreAlgebra, GeneratorAlgebra, GeneratorService}
+import io.github.ruixuantan.rocknroll.core.generators.DefaultGenerator
 import io.github.ruixuantan.rocknroll.core.parser.ParseError
 import io.github.ruixuantan.rocknroll.core.tokens.Token
-import io.github.ruixuantan.rocknroll.server.dto.{DieResponse, InvalidResponse, ValidResponse, ValidateResponse}
 import io.github.ruixuantan.rocknroll.server.models.{DieCount, Results}
+import io.github.ruixuantan.rocknroll.server.routes.requests.DieRequest
+import io.github.ruixuantan.rocknroll.server.routes.responses.{
+  DieResponse,
+  InvalidResponse,
+  ValidResponse,
+  ValidateResponse,
+}
 import io.github.ruixuantan.rocknroll.server.routes.{RoutePaths, RouteSuffixes}
 import io.github.ruixuantan.rocknroll.server.utils.ActionableResponse
 
@@ -17,8 +24,10 @@ import scala.concurrent.Future
 
 class DieService[F[_]: Applicative](
     coreAlgebra: CoreAlgebra,
+    generatorMap: Map[String, GeneratorAlgebra],
     baseUrl: String,
 ) {
+
   def validate(input: String): F[DieResponse] = {
     val tokens = for {
       tokens <- coreAlgebra.parse(input)
@@ -48,36 +57,43 @@ class DieService[F[_]: Applicative](
       } yield HttpService.post(baseUrl + RoutePaths.StatsRoutePath.path + RouteSuffixes.statsDiecount, b)
     }
 
-  private def saveResult(input: String, results: String): Future[Unit] =
+  private def saveResult(input: String, results: String, generator: String): Future[Unit] =
     Future {
       HttpService.post(
         baseUrl + RoutePaths.StatsRoutePath.path + RouteSuffixes.statsResult,
-        Results(input = input, result = results).asJson.toString,
+        Results(input = input, result = results, generator = generator).asJson.toString,
       )
     }
 
-  def eval(input: String): F[ActionableResponse[DieResponse]] = {
+  def eval(dieRequest: DieRequest): F[ActionableResponse[DieResponse]] = {
     val tokens = for {
-      tokens <- coreAlgebra.parse(input)
+      tokens <- coreAlgebra.parse(dieRequest.input)
     } yield tokens
+
+    val generatorService: GeneratorAlgebra =
+      generatorMap.getOrElse(dieRequest.generator, GeneratorService(DefaultGenerator()))
 
     val results = for {
       t   <- tokens
-      res <- coreAlgebra.eval(t)
+      res <- generatorService.eval(t)
     } yield res
 
     val response: ActionableResponse[DieResponse] = results match {
       case Right(res) =>
+        val inputString  = res.map(_.input).mkString(" / ")
         val resultString = res.map(_.result).mkString(" / ")
         ActionableResponse(
           ValidResponse(
-            res.map(_.input).mkString(" / "),
+            inputString,
             resultString,
             res.map(_.expected).mkString(" / "),
             res.map(_.standardDeviation).mkString(" / "),
             res.toArray,
           ),
-          List(() => saveDieCount(tokens), () => saveResult(input, resultString)),
+          List(
+            () => saveDieCount(tokens),
+            () => saveResult(inputString, resultString, dieRequest.generator),
+          ),
         )
       case Left(err) => ActionableResponse(InvalidResponse(err.msg), null)
     }
@@ -88,7 +104,8 @@ class DieService[F[_]: Applicative](
 object DieService {
   def apply[F[_]: Applicative](
       coreAlgebra: CoreAlgebra,
+      generatorMaps: Map[String, GeneratorAlgebra],
       baseUrl: String,
   ) =
-    new DieService[F](coreAlgebra, baseUrl)
+    new DieService[F](coreAlgebra, generatorMaps, baseUrl)
 }

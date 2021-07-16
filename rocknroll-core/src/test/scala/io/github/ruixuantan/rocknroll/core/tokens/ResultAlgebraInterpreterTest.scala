@@ -1,14 +1,17 @@
 package io.github.ruixuantan.rocknroll.core.tokens
 
+import io.github.ruixuantan.rocknroll.core.generators.DefaultGenerator
 import io.github.ruixuantan.rocknroll.core.results.Result
 import io.github.ruixuantan.rocknroll.core.tokens.Value.{Die, Number}
-import io.github.ruixuantan.rocknroll.core.tokens.ValueInstances._
 import io.github.ruixuantan.rocknroll.core.tokens.ValueSyntax._
 import io.github.ruixuantan.rocknroll.core.results.ResultInstances._
 import io.github.ruixuantan.rocknroll.core.results.ResultSyntax._
 import org.scalatest.funsuite.AnyFunSuite
 
 class ResultAlgebraInterpreterTest extends AnyFunSuite {
+  val valueInstances = new ValueInstances(DefaultGenerator())
+  import valueInstances.dieAlgebraInterpreter
+  import valueInstances.numberAlgebraInterpreter
 
   test("ResultService getResult of d15") {
     val res = Die(15, 1).getResult

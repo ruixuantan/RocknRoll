@@ -4,10 +4,11 @@
 }
 
 .die-command-container {
-  width: 300px;
+  width: 900px;
   margin: auto;
-  display: grid;
-  grid-template-columns: 230px 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
 }
 
 .die-command-input {

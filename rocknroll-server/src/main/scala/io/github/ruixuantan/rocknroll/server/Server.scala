@@ -6,7 +6,8 @@ import doobie.hikari.HikariTransactor
 import doobie.util.ExecutionContexts
 import io.circe.config.parser
 import io.circe.generic.codec.DerivedAsObjectCodec.deriveCodec
-import io.github.ruixuantan.rocknroll.core.CoreService
+import io.github.ruixuantan.rocknroll.core.{CoreService, GeneratorAlgebra, GeneratorService}
+import io.github.ruixuantan.rocknroll.core.generators.{CyclicalGenerator, DefaultGenerator}
 import io.github.ruixuantan.rocknroll.server.repository.{DieCountRepository, ResultsRepository}
 import io.github.ruixuantan.rocknroll.server.routes.{DieRoute, RoutePaths, StatsRoute}
 import io.github.ruixuantan.rocknroll.server.services.{DieService, StatsService}
@@ -20,6 +21,12 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object Server extends IOApp {
   private def config[F[_]: ContextShift: Sync]: Resource[F, RocknRollConfig] =
     Resource.eval(parser.decodePathF[F, RocknRollConfig]("rocknroll"))
+
+  private def initialiseGeneratorServices: Map[String, GeneratorAlgebra] = {
+    val cyclic  = GeneratorService(CyclicalGenerator(0))
+    val default = GeneratorService(DefaultGenerator())
+    Map(cyclic.getGeneratorName -> cyclic, default.getGeneratorName -> default)
+  }
 
   private def loggedRoutes[F[_]: ConcurrentEffect](
       cfg: LogConfig,
@@ -67,11 +74,12 @@ object Server extends IOApp {
       conf <- config[F]
       _    <- dbMigrate[F](conf.db)
       xa   <- dbTransactor[F](conf.db)
-      coreService        = CoreService
+      coreAlgebra        = CoreService
+      generatorMap       = initialiseGeneratorServices
       dieCountRepository = DieCountRepository[F](xa)
       resultsRepository  = ResultsRepository[F](xa)
       baseUrl            = conf.server.baseUrl
-      dieService         = DieService[F](coreService, baseUrl)
+      dieService         = DieService[F](coreAlgebra, generatorMap, baseUrl)
       statsService       = StatsService[F](dieCountRepository, resultsRepository)
       routes = Router(
         RoutePaths.DieRoutePath.path   -> DieRoute.endpoints[F](dieService),

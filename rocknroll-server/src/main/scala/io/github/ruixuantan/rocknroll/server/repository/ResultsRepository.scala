@@ -10,14 +10,14 @@ private object ResultsSQLService {
   implicit val handler = DoobieLogger.logger
 
   def insert(results: Results): Update0 =
-    sql"""INSERT INTO results (input_string, result) VALUES (${results.input}, ${results.result})""".update
+    sql"""INSERT INTO results (input_string, result, generator) 
+         VALUES (${results.input}, ${results.result}, ${results.generator})""".update
 
   def selectAll(): Query0[Results] =
     sql"""SELECT * FROM results ORDER BY id""".query
 }
 
-class ResultsRepository[F[_]: Sync](val xa: Transactor[F])
-    extends ResultsRepositoryAlgebra[F] {
+class ResultsRepository[F[_]: Sync](val xa: Transactor[F]) extends ResultsRepositoryAlgebra[F] {
   import ResultsSQLService._
 
   override def create(results: Results): F[Results] =

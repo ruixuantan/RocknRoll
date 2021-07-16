@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { DieTemplate, DieRow, DieSingleResult } from 'src/app/models/Dice';
+import {
+  DieTemplate, DieRow, DieSingleResult, Generator, DieRequest,
+} from 'src/app/models/Dice';
 import { CommandHistoryService } from 'src/app/services/command-history.service';
 import { CustomService } from 'src/app/services/custom.service';
 import { DiceService } from '../../services/dice.service';
@@ -16,7 +18,9 @@ export class DiceComponent {
 
   displayedColumns: string[] = ['input', 'output', 'expected', 'standardDeviation'];
 
-  dieCommandInput = '';
+  dieRequest: DieRequest = { input: '', generator: Generator.DEFAULT };
+
+  generatorList = [Generator.DEFAULT, Generator.CYCLIC];
 
   constructor(
     private diceService: DiceService,
@@ -39,32 +43,33 @@ export class DiceComponent {
     this.dieResults = [...this.dieResults];
   }
 
-  parseDieInput(input: string) {
-    if (!input) { return; }
-    input = input.trim();
-    let displayInput = input;
+  parseDieInput() {
+    console.log(this.dieRequest);
+    if (!this.dieRequest.input) { return; }
+    this.dieRequest.input = this.dieRequest.input.trim();
+    let displayInput = this.dieRequest.input;
     try {
-      const custom = this.customService.getCustom(input);
-      input = custom.command;
+      const custom = this.customService.getCustom(this.dieRequest.input);
+      this.dieRequest.input = custom.command;
       displayInput = custom.name;
     } catch (err) { }
-    this.diceService.parseDieInput(input)
+    this.diceService.parseDieInput(this.dieRequest)
       .subscribe(
         (res) => this.updateDieResults(
           res.inputString, res.resultString, res.expected, res.standardDeviation, res.results,
         ),
         (err) => this.updateDieResults(displayInput, err.error, '', '', []),
       );
-    this.commandHistory.commit(this.dieCommandInput);
-    this.dieCommandInput = '';
+    this.commandHistory.commit(this.dieRequest.input);
+    this.dieRequest.input = '';
   }
 
   getPrevCommand() {
-    this.dieCommandInput = this.commandHistory.getPrevCommand(this.dieCommandInput);
+    this.dieRequest.input = this.commandHistory.getPrevCommand(this.dieRequest.input);
   }
 
   getNextCommand() {
-    this.dieCommandInput = this.commandHistory.getNextCommand(this.dieCommandInput);
+    this.dieRequest.input = this.commandHistory.getNextCommand(this.dieRequest.input);
   }
 
   clearTable() {

@@ -1,10 +1,11 @@
 package io.github.ruixuantan.rocknroll.core.parser
 
 import cats.implicits._
+import io.github.ruixuantan.rocknroll.core.generators.Generator
 import io.github.ruixuantan.rocknroll.core.results.Result
 import io.github.ruixuantan.rocknroll.core.tokens.{Operator, Token, Value}
 import io.github.ruixuantan.rocknroll.core.tokens.Operator.{Add, Separate, Subtract}
-import io.github.ruixuantan.rocknroll.core.tokens.ValueInstances._
+import io.github.ruixuantan.rocknroll.core.tokens.ValueInstances
 import io.github.ruixuantan.rocknroll.core.tokens.ValueSyntax._
 import io.github.ruixuantan.rocknroll.core.results.ResultInstances._
 import io.github.ruixuantan.rocknroll.core.results.ResultInstances.resultAlgebraInterpreter.identity
@@ -48,28 +49,33 @@ class DieParserService(tokenParser: TokenParser) extends DieParserAlgebra {
       tokens: List[Token],
       op: Operator,
       acc: Result,
-  ): Either[ParseOrderError.type, Result] =
+      valueInstances: ValueInstances,
+  ): Either[ParseOrderError.type, Result] = {
+    import valueInstances.valueAlgebraInterpreter
+
     tokens.headOption
-      .map({
+      .map {
         case value: Value =>
           op match {
-            case Add      => evalTokens(tokens.tail, acc + value.getResult)
-            case Subtract => evalTokens(tokens.tail, acc - value.getResult)
+            case Add      => evalTokens(tokens.tail, acc + value.getResult, valueInstances)
+            case Subtract => evalTokens(tokens.tail, acc - value.getResult, valueInstances)
             case _        => Left(ParseOrderError)
           }
         case _ => Left(ParseOrderError)
-      })
+      }
       .getOrElse(Left(ParseOrderError))
+  }
 
   def evalTokens(
       tokens: List[Token],
       acc: Result,
+      valueInstances: ValueInstances,
   ): Either[ParseOrderError.type, Result] =
     tokens.headOption
-      .map({
-        case op: Operator => handleEvalOperator(tokens.tail, op, acc)
+      .map {
+        case op: Operator => handleEvalOperator(tokens.tail, op, acc, valueInstances)
         case _            => Left(ParseOrderError)
-      })
+      }
       .getOrElse(Right(acc))
 
   @tailrec
@@ -87,10 +93,12 @@ class DieParserService(tokenParser: TokenParser) extends DieParserAlgebra {
 
   override def eval(
       tokens: List[Token],
+      generator: Generator,
   ): Either[ParseError, List[FinalResult]] = {
-    val separated = separateTokens(tokens, new ListBuffer[Token](), new ListBuffer[List[Token]]())
+    val separated      = separateTokens(tokens, new ListBuffer[Token](), new ListBuffer[List[Token]]())
+    val valueInstances = ValueInstances(generator)
     for {
-      results <- separated.map(tokenList => evalTokens(Add :: tokenList, identity)).sequence
+      results <- separated.map(tokenList => evalTokens(Add :: tokenList, identity, valueInstances)).sequence
     } yield separated.zip(results).map(elem => getFinalResult(elem._1, elem._2))
   }
 }
