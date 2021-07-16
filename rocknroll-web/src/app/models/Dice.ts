@@ -29,6 +29,16 @@ export interface DieRow {
   result: DieSingleResult[]
 }
 
+export interface DieRequest {
+  input: string,
+  generator: string
+}
+
+export enum Generator {
+  DEFAULT = 'default',
+  CYCLIC = 'cyclic',
+}
+
 const emptyDieResult = {
   input: '', output: '', expected: '', standardDeviation: '',
 };
