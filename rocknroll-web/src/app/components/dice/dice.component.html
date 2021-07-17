@@ -3,10 +3,10 @@
     <div>
       <mat-form-field class="die-command-input" appearance="fill">
         <mat-label>Roll the die!</mat-label>
-        <input matInput type="text" [(ngModel)]="dieRequest.input" (keydown.enter)="parseDieInput()" 
+        <input matInput type="text" [(ngModel)]="input" (keydown.enter)="parseDieInput()"
           (keydown.arrowup)="getPrevCommand()" (keydown.arrowdown)="getNextCommand()" autocomplete="off">
-        <button mat-button *ngIf="dieRequest.input" matSuffix mat-icon-button aria-label="Clear"
-          (click)="dieRequest.input=''">
+        <button mat-button *ngIf="input" matSuffix mat-icon-button aria-label="Clear"
+          (click)="input=''">
           <mat-icon>close</mat-icon>
         </button>
       </mat-form-field>
@@ -14,7 +14,7 @@
     <div>
       <mat-form-field appearance="fill">
         <mat-label>Select Generator</mat-label>
-        <mat-select [(ngModel)]="dieRequest.generator">
+        <mat-select [(ngModel)]="generator">
           <mat-option [value]=value *ngFor="let value of generatorList">{{ value }}</mat-option>
         </mat-select>
       </mat-form-field>

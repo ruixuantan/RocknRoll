@@ -9,7 +9,6 @@ import io.github.ruixuantan.rocknroll.core.generators.DefaultGenerator
 import io.github.ruixuantan.rocknroll.core.parser.ParseError
 import io.github.ruixuantan.rocknroll.core.tokens.Token
 import io.github.ruixuantan.rocknroll.server.models.{DieCount, Results}
-import io.github.ruixuantan.rocknroll.server.routes.requests.DieRequest
 import io.github.ruixuantan.rocknroll.server.routes.responses.{
   DieResponse,
   InvalidResponse,
@@ -65,13 +64,13 @@ class DieService[F[_]: Applicative](
       )
     }
 
-  def eval(dieRequest: DieRequest): F[ActionableResponse[DieResponse]] = {
+  def eval(input: String, generator: String): F[ActionableResponse[DieResponse]] = {
     val tokens = for {
-      tokens <- coreAlgebra.parse(dieRequest.input)
+      tokens <- coreAlgebra.parse(input)
     } yield tokens
 
     val generatorService: GeneratorAlgebra =
-      generatorMap.getOrElse(dieRequest.generator, GeneratorService(DefaultGenerator()))
+      generatorMap.getOrElse(generator, GeneratorService(DefaultGenerator()))
 
     val results = for {
       t   <- tokens
@@ -92,7 +91,7 @@ class DieService[F[_]: Applicative](
           ),
           List(
             () => saveDieCount(tokens),
-            () => saveResult(inputString, resultString, dieRequest.generator),
+            () => saveResult(inputString, resultString, generator),
           ),
         )
       case Left(err) => ActionableResponse(InvalidResponse(err.msg), null)
