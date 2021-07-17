@@ -1,6 +1,6 @@
 package io.github.ruixuantan.rocknroll.core.tokens
 
-import io.github.ruixuantan.rocknroll.core.generators.{CyclicalGenerator, DefaultGenerator}
+import io.github.ruixuantan.rocknroll.core.generators.DefaultGenerator
 import io.github.ruixuantan.rocknroll.core.results.Result
 import io.github.ruixuantan.rocknroll.core.tokens.Value.Die
 import org.scalatest.funsuite.AnyFunSuite

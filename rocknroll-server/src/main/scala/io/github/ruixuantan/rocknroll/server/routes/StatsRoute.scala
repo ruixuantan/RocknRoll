@@ -25,7 +25,7 @@ class StatsRoute[F[_]: Sync] extends Http4sDsl[F] {
   ): HttpRoutes[F] =
     HttpRoutes.of { case GET -> Root =>
       for {
-        dieCount <- statsService.listDieCount()
+        dieCount <- statsService.listDieCount
         resp     <- Ok(dieCount.asJson)
       } yield resp
     }
@@ -45,7 +45,7 @@ class StatsRoute[F[_]: Sync] extends Http4sDsl[F] {
   ): HttpRoutes[F] =
     HttpRoutes.of { case GET -> Root / RouteSuffixes.statsDiecountSum =>
       for {
-        total <- statsService.getTotalDieCount()
+        total <- statsService.getTotalDieCount
         x <- total match {
           case Some(value) => Ok(DieCountSum(value))
           case None        => Ok(DieCountSum(0))

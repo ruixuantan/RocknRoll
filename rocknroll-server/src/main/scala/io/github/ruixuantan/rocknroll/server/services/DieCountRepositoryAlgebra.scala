@@ -7,9 +7,9 @@ trait DieCountRepositoryAlgebra[F[_]] {
 
   def get(dieSides: Int): F[Option[DieCount]]
 
-  def list(): F[Array[DieCount]]
+  def list: F[Array[DieCount]]
 
   def listTop(count: Int): F[Array[DieCount]]
 
-  def getDieCountSum(): F[Option[Int]]
+  def getDieCountSum: F[Option[Int]]
 }

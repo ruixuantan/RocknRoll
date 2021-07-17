@@ -1,7 +1,7 @@
 package io.github.ruixuantan.rocknroll.core.generators
 
 class CyclicalGenerator(initSeed: Long) extends Generator {
-  var seed = initSeed.toInt
+  var seed: Int = initSeed.toInt
 
   override def getName: String = "cyclic"
 
