@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import {
-  DieTemplate, DieRow, DieSingleResult, Generator, DieRequest,
+  DieTemplate, DieRow, DieSingleResult, Generator,
 } from 'src/app/models/Dice';
 import { CommandHistoryService } from 'src/app/services/command-history.service';
 import { CustomService } from 'src/app/services/custom.service';
@@ -18,9 +18,11 @@ export class DiceComponent {
 
   displayedColumns: string[] = ['input', 'output', 'expected', 'standardDeviation'];
 
-  dieRequest: DieRequest = { input: '', generator: Generator.DEFAULT };
+  input = '';
 
-  generatorList = [Generator.DEFAULT, Generator.CYCLIC];
+  generator = Generator.DEFAULT;
+
+  generatorList = Object.values(Generator);
 
   constructor(
     private diceService: DiceService,
@@ -44,32 +46,31 @@ export class DiceComponent {
   }
 
   parseDieInput() {
-    console.log(this.dieRequest);
-    if (!this.dieRequest.input) { return; }
-    this.dieRequest.input = this.dieRequest.input.trim();
-    let displayInput = this.dieRequest.input;
+    if (!this.input) { return; }
+    this.input = this.input.trim();
+    let displayInput = this.input;
     try {
-      const custom = this.customService.getCustom(this.dieRequest.input);
-      this.dieRequest.input = custom.command;
+      const custom = this.customService.getCustom(this.input);
+      this.input = custom.command;
       displayInput = custom.name;
     } catch (err) { }
-    this.diceService.parseDieInput(this.dieRequest)
+    this.diceService.parseDieInput(this.input, this.generator)
       .subscribe(
         (res) => this.updateDieResults(
           res.inputString, res.resultString, res.expected, res.standardDeviation, res.results,
         ),
         (err) => this.updateDieResults(displayInput, err.error, '', '', []),
       );
-    this.commandHistory.commit(this.dieRequest.input);
-    this.dieRequest.input = '';
+    this.commandHistory.commit(this.input);
+    this.input = '';
   }
 
   getPrevCommand() {
-    this.dieRequest.input = this.commandHistory.getPrevCommand(this.dieRequest.input);
+    this.input = this.commandHistory.getPrevCommand(this.input);
   }
 
   getNextCommand() {
-    this.dieRequest.input = this.commandHistory.getNextCommand(this.dieRequest.input);
+    this.input = this.commandHistory.getNextCommand(this.input);
   }
 
   clearTable() {
