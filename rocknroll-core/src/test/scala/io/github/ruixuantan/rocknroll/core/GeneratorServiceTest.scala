@@ -6,7 +6,7 @@ import io.github.ruixuantan.rocknroll.core.tokens.Value.Die
 import org.scalatest.funsuite.AnyFunSuite
 
 class GeneratorServiceTest extends AnyFunSuite {
-  val generatorService = GeneratorService(CyclicalGenerator(0))
+  val generatorService: GeneratorAlgebra = GeneratorService(CyclicalGenerator(0))
 
   test("Generator Service test seed continuation") {
     generatorService.eval(List(Die(4, 1), Operator.Separate, Die(4, 1))) match {
