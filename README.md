@@ -30,14 +30,6 @@ npm 7.14.0
 ./start.sh test
 ```
 
-## Ports
-| Services| Port Number |
-| ------- | ----------- |
-| Server  | 8080        |
-| Postgres| 5432        |
-| Web     | 4200        |
-
-
 ## Links
 * [core](rocknroll-core/README.md)
 * [server](rocknroll-server/README.md)
