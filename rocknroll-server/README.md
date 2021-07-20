@@ -14,12 +14,12 @@ postgres=# grant all privileges on database rocknroll to rocknroll;
 ### Evaluate die string
 | Method | URL | URL Params |
 | ------ | --- | ---------- |
-| `POST` | /api/v1/dice | None |
+| `POST` | /api/v1/dice | generator |
 
 * Data Params
     * body: text/plain
 
-* Sample Call
+* Sample Call: /api/v1/dice?generator=default
     ```
     8d6 + 5 / d20
     ```
